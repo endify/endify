@@ -1,0 +1,11 @@
+<html>
+  <body>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{typeof title !== 'undefined' ? title : '-'}}</title>
+    <script>window.__ENV__ = JSON.parse('{{{JSON.stringify(env)}}}');</script>
+  </head>
+  <body>
+    <div id="app"><!--vue-ssr-outlet--></div>
+  </body>
+</html>
