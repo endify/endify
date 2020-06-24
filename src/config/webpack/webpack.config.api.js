@@ -17,7 +17,7 @@ module.exports = () => {
 
   // Get entry file
   if(IS_DEV) {
-    c.entry = [path.join(BASE_PATH, 'node_modules', `webpack/hot/poll?${webpackPollInterval}`), entryApiPath]
+    c.entry = [`webpack/hot/poll.js`, entryApiPath]
   } else {
     c.entry = entryApiPath
   }
@@ -25,33 +25,56 @@ module.exports = () => {
   // Set target to node
   c.target = 'node'
 
-  // Set externals - ignore hot poll
-  if(IS_DEV) {
-    c.externals = [nodeExternals({
-      whitelist: [
-        `webpack/hot/poll?${webpackPollInterval}`
-      ]
-    })]
-  } else {
-    c.externals = {
-      'webpack': 'commonjs webpack',
-      'babel-loader': 'commonjs babel-loader',
-      'vue-loader': 'commonjs vue-loader',
-      'vue-server-renderer': 'commonjs vue-server-renderer',
-      'express': 'commonjs express',
-      'sequelize': 'commonjs sequelize',
-      'awilix': 'commonjs awilix'
-    }
-  }
 
   c.externals = {
-      ...nodeExternals({
-        whitelist: [
-          `webpack/hot/poll?${webpackPollInterval}`
-        ]
-      }),
+    ...nodeExternals({
+      whitelist: [
+        `webpack/hot/poll?${webpackPollInterval}`
+      ],
+      target: 'node',
+      modulesDir: path.join(BASE_PATH, 'node_modules')
+    }),
     webpack: path.join(BASE_PATH, 'node_modules/webpack'),
-      'webpack-dev-middleware': `commonjs ${path.join(BASE_PATH, 'node_modules/webpack-dev-middleware')}`
+    'webpack-dev-middleware': `commonjs ${path.join(BASE_PATH, 'node_modules/webpack-dev-middleware')}`
+  }
+
+
+  // c.externals = {
+  //
+  //
+  //   target: 'node',
+  //   modulesDir: path.join(BASE_PATH, 'node_modules')
+  // }),
+
+  // Set externals - ignore hot poll
+  // if(IS_DEV) {
+  //   c.externals = [nodeExternals({
+  //     whitelist: [
+  //       `webpack/hot/poll?${webpackPollInterval}`
+  //     ]
+  //   })]
+  // } else {
+  //   c.externals = {
+  //     'webpack': 'commonjs webpack',
+  //     'babel-loader': 'commonjs babel-loader',
+  //     'vue-loader': 'commonjs vue-loader',
+  //     'vue-server-renderer': 'commonjs vue-server-renderer',
+  //     'express': 'commonjs express',
+  //     'sequelize': 'commonjs sequelize',
+  //     'awilix': 'commonjs awilix'
+  //   }
+  // }
+
+  // c.externals = {
+  //     ...nodeExternals({
+  //       whitelist: [
+  //         `webpack/hot/poll?${webpackPollInterval}`
+  //       ],
+  //       target: 'node',
+  //       modulesDir: path.join(BASE_PATH, 'node_modules')
+  //     }),
+    // webpack: path.join(BASE_PATH, 'node_modules/webpack'),
+      // 'webpack-dev-middleware': `commonjs ${path.join(BASE_PATH, 'node_modules/webpack-dev-middleware')}`
     // 'webpack': 'commonjs2 webpack',
     // 'babel-loader': 'commonjs babel-loader',
     // 'vue-loader': 'commonjs vue-loader',
@@ -61,7 +84,7 @@ module.exports = () => {
     // 'sequelize': 'commonjs sequelize',
     // 'awilix': 'commonjs awilix',
     // '@babel/plugin-proposal-optional-chaining': 'commonjs @babel/plugin-proposal-optional-chaining',
-  }
+  // }
 
   // Set mode
   c.mode = IS_DEV ? 'development' : 'production'
@@ -90,22 +113,39 @@ module.exports = () => {
     'process.env.ISSUER_PATH': JSON.stringify(ISSUER_PATH)
   }))
 
-  if(!IS_DEV) {
-    c.optimization = {
-      minimize: false
-    }
-  }
+  // if(!IS_DEV) {
+  //   c.optimization = {
+  //     minimize: false
+  //   }
+  // }
 
   if(IS_DEV) {
     // c.stats = 'errors-only'
   }
 
+  // const pp = path.join(ISSUER_PATH)
+  // let pp = path.join(path.normalize(process.cwd()), 'asd', 'fajnyplik.js')
+  // pp = pp.replace(/\\/g, '/')
   c.resolve = {
-    modules: [path.join(BASE_PATH, 'node_modules')],
-      alias: {
-          'ISSUER_PATH': ISSUER_PATH
-      }
+    alias: {
+      '@project': ISSUER_PATH,
+    },
+    modules: [path.join(BASE_PATH, '/node_modules')]
   }
+  // console.log(path.join(BASE_PATH, '/node_modules'))
+  //   C:\Users\pieczorx\projects\endify\src\config\test
+  //   C:\Users\pieczorx\projects\apkeo-website\asd
+  //
+  setTimeout(() => {
+    console.log(ISSUER_PATH)
+  }, 1500)
+  // c.resolve = {
+  //   // extensions: ['*', '.js', '.vue', '.json'],
+  //   // modules: [path.join(BASE_PATH, 'node_modules')],
+  //   //   alias: {
+  //   //       '@testx': path.resolve(ISSUER_PATH)
+  //   //   }
+  // }
 
   c.resolveLoader = {
     modules: [path.join(BASE_PATH, 'node_modules')]
@@ -113,5 +153,6 @@ module.exports = () => {
 
   c.context = path.resolve(BASE_PATH)
 
+  // console.log(c.resolve)
   return c
 }

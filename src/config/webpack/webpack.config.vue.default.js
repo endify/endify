@@ -39,7 +39,7 @@ module.exports = () => {
           ]
         },
         {
-          test: /\.(png|jpe?g|gif)$/i,
+          test: /\.(png|jpe?g|gif|svg)$/i,
           use: [
             {
               loader: 'file-loader',
@@ -73,7 +73,7 @@ module.exports = () => {
       extensions: ['*', '.js', '.vue', '.json'],
       modules: [path.join(process.env.BASE_PATH, 'node_modules'), 'node_modules'],
       alias: {
-          'ISSUER_PATH': process.env.ISSUER_PATH
+          '@project': process.env.ISSUER_PATH
       }
     },
     resolveLoader: {

@@ -2,7 +2,7 @@
   "name": "endify",
   "version": "1.0.0",
   "description": "![Endify logo](https://github.com/endify/endify/blob/master/endify-header.png)",
-  "main": "index.js",
+  "main": "src/endify.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env BASE_PATH=$INIT_CWD NODE_ENV=development webpack --config src/config/webpack/webpack.config.api.js"
