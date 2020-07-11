@@ -6,7 +6,7 @@ import webpackDevMiddleware from 'webpack-dev-middleware'
 import {createBundleRenderer} from 'vue-server-renderer'
 
 export class VueBundleWatcher {
-  constructor({serverBundlePath, manifestBundlePath, templatePath, publicPath, clientWebpackConfig, serverWebpackConfig}) {
+  constructor({serverBundlePath, manifestBundlePath, templatePath, publicPath, clientWebpackConfig, serverWebpackConfig, bundleRendererBaseDir}) {
     this.serverBundlePath = serverBundlePath
     this.clientBundlePath = manifestBundlePath
     this.publicPath = publicPath
@@ -18,6 +18,7 @@ export class VueBundleWatcher {
     this.clientBundle = null
     this.serverBundle = null
     this.template = null
+    this.bundleRendererBaseDir = bundleRendererBaseDir
   }
 
   loadRenderer() {
@@ -68,8 +69,10 @@ export class VueBundleWatcher {
     this._renderer = createBundleRenderer(this.serverBundle, {
       runInNewContext: false,
       template: this.template,
-      clientManifest: this.clientBundle
+      clientManifest: this.clientBundle,
+      basedir: this.bundleRendererBaseDir,
     })
+
     this.eventEmitter.emit('update', {
       renderer: this.renderer
     })

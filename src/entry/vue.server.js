@@ -1,5 +1,8 @@
 import {setupApp} from '../setup/vue/setupApp'
+import os from 'os'
+
 function vueEntryServer(context) {
+  console.log('siemanerko', path)
   return new Promise(async (resolve, reject) => {
     try {
       const {vueApp, vueConfig: {router, store}} = setupApp()

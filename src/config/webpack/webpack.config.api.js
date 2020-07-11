@@ -5,7 +5,7 @@ const nodeExternals = require('webpack-node-externals')
 require('dotenv-extended').load();
 
 
-module.exports = () => {
+module.exports = (options) => {
   const ISSUER_PATH = process.cwd()
   const BASE_PATH = path.resolve(__dirname, '../../../');
   const entryApiPath = path.resolve(__dirname, '../../entry/api.js')
@@ -13,7 +13,7 @@ module.exports = () => {
   const webpackPollInterval = 500;
   const c = {}
 
-  const IS_DEV = process.env.NODE_ENV !== 'production'
+  const IS_DEV = options.dev !== 'production'
 
   // Get entry file
   if(IS_DEV) {
@@ -35,56 +35,9 @@ module.exports = () => {
       modulesDir: path.join(BASE_PATH, 'node_modules')
     }),
     webpack: path.join(BASE_PATH, 'node_modules/webpack'),
-    'webpack-dev-middleware': `commonjs ${path.join(BASE_PATH, 'node_modules/webpack-dev-middleware')}`
+    'webpack-dev-middleware': `commonjs ${path.join(BASE_PATH, 'node_modules/webpack-dev-middleware')}`,
+    'http': 'commonjs http',
   }
-
-
-  // c.externals = {
-  //
-  //
-  //   target: 'node',
-  //   modulesDir: path.join(BASE_PATH, 'node_modules')
-  // }),
-
-  // Set externals - ignore hot poll
-  // if(IS_DEV) {
-  //   c.externals = [nodeExternals({
-  //     whitelist: [
-  //       `webpack/hot/poll?${webpackPollInterval}`
-  //     ]
-  //   })]
-  // } else {
-  //   c.externals = {
-  //     'webpack': 'commonjs webpack',
-  //     'babel-loader': 'commonjs babel-loader',
-  //     'vue-loader': 'commonjs vue-loader',
-  //     'vue-server-renderer': 'commonjs vue-server-renderer',
-  //     'express': 'commonjs express',
-  //     'sequelize': 'commonjs sequelize',
-  //     'awilix': 'commonjs awilix'
-  //   }
-  // }
-
-  // c.externals = {
-  //     ...nodeExternals({
-  //       whitelist: [
-  //         `webpack/hot/poll?${webpackPollInterval}`
-  //       ],
-  //       target: 'node',
-  //       modulesDir: path.join(BASE_PATH, 'node_modules')
-  //     }),
-    // webpack: path.join(BASE_PATH, 'node_modules/webpack'),
-      // 'webpack-dev-middleware': `commonjs ${path.join(BASE_PATH, 'node_modules/webpack-dev-middleware')}`
-    // 'webpack': 'commonjs2 webpack',
-    // 'babel-loader': 'commonjs babel-loader',
-    // 'vue-loader': 'commonjs vue-loader',
-    // [path.join(BASE_PATH, 'node_modules')]
-    // 'vue-server-renderer': 'commonjs vue-server-renderer',
-    // 'express': `commonjs ${path.join(BASE_PATH, 'node_modules/express')}`,
-    // 'sequelize': 'commonjs sequelize',
-    // 'awilix': 'commonjs awilix',
-    // '@babel/plugin-proposal-optional-chaining': 'commonjs @babel/plugin-proposal-optional-chaining',
-  // }
 
   // Set mode
   c.mode = IS_DEV ? 'development' : 'production'
@@ -123,29 +76,12 @@ module.exports = () => {
     // c.stats = 'errors-only'
   }
 
-  // const pp = path.join(ISSUER_PATH)
-  // let pp = path.join(path.normalize(process.cwd()), 'asd', 'fajnyplik.js')
-  // pp = pp.replace(/\\/g, '/')
   c.resolve = {
     alias: {
       '@project': ISSUER_PATH,
     },
     modules: [path.join(BASE_PATH, '/node_modules')]
   }
-  // console.log(path.join(BASE_PATH, '/node_modules'))
-  //   C:\Users\pieczorx\projects\endify\src\config\test
-  //   C:\Users\pieczorx\projects\apkeo-website\asd
-  //
-  setTimeout(() => {
-    console.log(ISSUER_PATH)
-  }, 1500)
-  // c.resolve = {
-  //   // extensions: ['*', '.js', '.vue', '.json'],
-  //   // modules: [path.join(BASE_PATH, 'node_modules')],
-  //   //   alias: {
-  //   //       '@testx': path.resolve(ISSUER_PATH)
-  //   //   }
-  // }
 
   c.resolveLoader = {
     modules: [path.join(BASE_PATH, 'node_modules')]
