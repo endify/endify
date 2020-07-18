@@ -1,4 +1,5 @@
-// import axios from 'axios'
+import axios from 'axios'
+
 const axios = {}
 export class ApiService {
   static get(path, options) {

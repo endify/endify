@@ -13,7 +13,7 @@ module.exports = (options) => {
   const webpackPollInterval = 500;
   const c = {}
 
-  const IS_DEV = options.dev !== 'production'
+  const IS_DEV = options.env !== 'production'
 
   // Get entry file
   if(IS_DEV) {
@@ -37,6 +37,7 @@ module.exports = (options) => {
     webpack: path.join(BASE_PATH, 'node_modules/webpack'),
     'webpack-dev-middleware': `commonjs ${path.join(BASE_PATH, 'node_modules/webpack-dev-middleware')}`,
     'http': 'commonjs http',
+    'vue-server-renderer': `commonjs ${path.join(BASE_PATH, 'node_modules/vue-server-renderer')}`
   }
 
   // Set mode

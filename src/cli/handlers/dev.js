@@ -4,7 +4,9 @@ const handle = () => {
   const { spawn } = require('child_process');
   const DEST_PATH = process.cwd()
   const ENTRY_PATH = path.join(DEST_PATH, 'index.js')
-  const webpackConfig = require('../config/webpack/webpack.config.api')()
+  const webpackConfig = require('../../config/webpack/webpack.config.api')({
+    env: 'development'
+  })
   const compiler = webpack(webpackConfig)
 
   compiler.run((e, stats) => {
@@ -16,7 +18,7 @@ const handle = () => {
     apiProcess.on('close', (code) => {
       console.log(`spawnedApiProcess shut down with code ${code}`);
     });
-    console.log('Compiled.')
+    console.log('Successfully started an app.')
   })
 }
 

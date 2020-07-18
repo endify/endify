@@ -84,7 +84,7 @@ module.exports = () => {
   if(IS_DEV) {
     c.stats = 'errors-only'
     // c.plugins.push(new webpack.NoEmitOnErrorsPlugin())
-    // c.plugins.push(new FriendlyErrorsWebpackPlugin())
+    c.plugins.push(new FriendlyErrorsWebpackPlugin())
   }
 
   const packageJsonContent = fs.readFileSync(path.join(process.env.BASE_PATH, 'package.json'), 'utf-8')

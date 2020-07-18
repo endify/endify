@@ -25,7 +25,7 @@ module.exports = () => {
   //
   c.externals = {
     ...nodeExternals({
-      // target: 'node',
+      target: 'node',
       // modulesDir: ['node_modules', path.join(process.env.BASE_PATH, 'node_modules')]
     }),
   }
