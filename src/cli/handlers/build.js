@@ -1,15 +1,17 @@
-const handle = () => {
+const handle = ({paths}) => {
   const webpack = require('webpack')
-
   const webpackConfigs = {
     api: require('../../config/webpack/webpack.config.api.js')({
-      env: 'development'
+      ...paths,
+      env: 'production',
     }),
     vueClient: require('../../config/webpack/webpack.config.vue.client.js')({
-      env: 'development'
+      ...paths,
+      env: 'production',
     }),
     vueServer: require('../../config/webpack/webpack.config.vue.server.js')({
-      env: 'development'
+      ...paths,
+      env: 'production',
     }),
   }
 
@@ -18,12 +20,11 @@ const handle = () => {
     vueClient: webpack(webpackConfigs.vueClient),
     vueServer: webpack(webpackConfigs.vueServer),
   }
-
   compilers.api.run((e, stats) => {
     if(e) {
       return console.log('Compiler error', e)
     }
-    console.log('Api compiled')
+    console.log('Api compiled', stats)
   })
 
   compilers.vueClient.run((e, stats) => {
@@ -33,7 +34,7 @@ const handle = () => {
     console.log('Vue client compiled')
   })
 
-  compilers.vueServer((e, stats) => {
+  compilers.vueServer.run((e, stats) => {
     if(e) {
       return console.log('Compiler error', e)
     }

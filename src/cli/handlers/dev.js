@@ -1,11 +1,12 @@
-const handle = () => {
+const handle = ({paths}) => {
   const path = require('path')
   const webpack = require('webpack')
   const { spawn } = require('child_process');
   const DEST_PATH = process.cwd()
   const ENTRY_PATH = path.join(DEST_PATH, 'index.js')
   const webpackConfig = require('../../config/webpack/webpack.config.api')({
-    env: 'development'
+    env: 'development',
+    ...paths,
   })
   const compiler = webpack(webpackConfig)
 

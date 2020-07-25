@@ -34,8 +34,14 @@ const start = async function() {
     manifestBundlePath: vueServerClientManifestPath,
     templatePath: vueTemplatePath,
     publicPath: publicDistPath,
-    clientWebpackConfig: clientWebpackConfig(),
-    serverWebpackConfig: serverWebpackConfig(),
+    clientWebpackConfig: clientWebpackConfig({
+      basePath: process.env.BASE_PATH,
+      issuerPath: process.env.ISSUER_PATH,
+    }),
+    serverWebpackConfig: serverWebpackConfig({
+      basePath: process.env.BASE_PATH,
+      issuerPath: process.env.ISSUER_PATH,
+    }),
     bundleRendererBaseDir: process.env.BASE_PATH
   })
   if(process.env.NODE_ENV === 'production') {

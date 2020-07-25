@@ -5,8 +5,11 @@ const fs = require('fs')
 const path = require('path')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
-module.exports = () => {
-  const IS_DEV = process.env.NODE_ENV !== 'production'
+module.exports = (options) => {
+  const basePath = options.basePath
+  const issuerPath = options.issuerPath
+
+  const IS_DEV = options.env !== 'production'
 
   const c = {
     mode: IS_DEV ? 'development' : 'production',
@@ -71,13 +74,13 @@ module.exports = () => {
     ],
     resolve: {
       extensions: ['*', '.js', '.vue', '.json'],
-      modules: ['node_modules', path.join(process.env.BASE_PATH, 'node_modules')],
+      modules: ['node_modules', path.join(basePath, 'node_modules')],
       alias: {
-          '@project': process.env.ISSUER_PATH
+          '@project': issuerPath
       }
     },
     resolveLoader: {
-      modules: [path.join(process.env.BASE_PATH, 'node_modules'), 'node_modules']
+      modules: [path.join(basePath, 'node_modules'), 'node_modules']
     }
   }
 
@@ -87,16 +90,22 @@ module.exports = () => {
     c.plugins.push(new FriendlyErrorsWebpackPlugin())
   }
 
-  const packageJsonContent = fs.readFileSync(path.join(process.env.BASE_PATH, 'package.json'), 'utf-8')
+  const packageJsonContent = fs.readFileSync(path.join(basePath, 'package.json'), 'utf-8')
   const packageJson = JSON.parse(packageJsonContent)
   const version = packageJson.version
 
   c.plugins.push(new webpack.DefinePlugin({
     '__PACKAGE_JSON_VERSION__': JSON.stringify(version),
-    'process.env.BASE_PATH': JSON.stringify(process.env.BASE_PATH),
+    'process.env.BASE_PATH': JSON.stringify(basePath),
   }))
 
-  c.context = path.resolve(process.env.BASE_PATH)
+  c.context = path.resolve(basePath)
 
   return c
 };
+//
+// module.exports = () => {
+//   return {
+//     plugins: []
+//   }
+// }

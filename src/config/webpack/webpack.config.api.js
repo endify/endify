@@ -1,14 +1,13 @@
 const webpack = require('webpack')
 const path = require('path')
-const StartServerPlugin = require('start-server-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
 require('dotenv-extended').load();
 
 
 module.exports = (options) => {
-  const ISSUER_PATH = process.cwd()
-  const BASE_PATH = path.resolve(__dirname, '../../../');
-  const entryApiPath = path.resolve(__dirname, '../../entry/api.js')
+  const issuerPath = options.issuerPath
+  const basePath = options.basePath
+  const entryApiPath = path.resolve(basePath, 'src/entry/api.js')
 
   const webpackPollInterval = 500;
   const c = {}
@@ -32,12 +31,13 @@ module.exports = (options) => {
         `webpack/hot/poll?${webpackPollInterval}`
       ],
       target: 'node',
-      modulesDir: path.join(BASE_PATH, 'node_modules')
+      modulesDir: path.join(basePath, 'node_modules')
     }),
-    webpack: path.join(BASE_PATH, 'node_modules/webpack'),
-    'webpack-dev-middleware': `commonjs ${path.join(BASE_PATH, 'node_modules/webpack-dev-middleware')}`,
+    webpack: path.join(basePath, 'node_modules/webpack'),
+    'webpack-dev-middleware': `commonjs ${path.join(basePath, 'node_modules/webpack-dev-middleware')}`,
     'http': 'commonjs http',
-    'vue-server-renderer': `commonjs ${path.join(BASE_PATH, 'node_modules/vue-server-renderer')}`
+    'vue-server-renderer': `commonjs ${path.join(basePath, 'node_modules/vue-server-renderer')}`,
+    'vue-loader': `commonjs ${path.join(basePath, 'node_modules/vue-loader')}`,
   }
 
   // Set mode
@@ -50,7 +50,7 @@ module.exports = (options) => {
 
   c.output = {
     filename: 'server.js',
-    path: path.join(ISSUER_PATH, '/dist/api'),
+    path: path.join(issuerPath, '/dist/api'),
     libraryTarget: 'commonjs2',
   }
 
@@ -63,8 +63,8 @@ module.exports = (options) => {
   }
 
   c.plugins.push(new webpack.DefinePlugin({
-    'process.env.BASE_PATH': JSON.stringify(BASE_PATH),
-    'process.env.ISSUER_PATH': JSON.stringify(ISSUER_PATH)
+    'process.env.BASE_PATH': JSON.stringify(basePath),
+    'process.env.ISSUER_PATH': JSON.stringify(issuerPath)
   }))
 
   // if(!IS_DEV) {
@@ -79,17 +79,15 @@ module.exports = (options) => {
 
   c.resolve = {
     alias: {
-      '@project': ISSUER_PATH,
+      '@project': issuerPath,
     },
-    modules: [path.join(BASE_PATH, '/node_modules')]
+    modules: [path.join(basePath, '/node_modules')]
   }
 
   c.resolveLoader = {
-    modules: [path.join(BASE_PATH, 'node_modules')]
+    modules: [path.join(basePath, 'node_modules')]
   }
 
-  c.context = path.resolve(BASE_PATH)
-
-  // console.log(c.resolve)
+  c.context = path.resolve(basePath)
   return c
 }
