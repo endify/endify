@@ -1,17 +1,16 @@
 {
-  "name": "endify",
-  "version": "1.0.0",
-  "description": "![Endify logo](https://github.com/endify/endify/blob/master/endify-header.png)",
+  "name": "endify-test",
+  "version": "0.0.1",
+  "description": "Vue.js on front, Node.js behind, Electron ready, Mobile soon - All in one codebase",
   "main": "src/endify.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env BASE_PATH=$INIT_CWD NODE_ENV=development webpack --config src/config/webpack/webpack.config.api.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/endify/endify.git"
   },
-  "author": "",
+  "author": "pieczorx",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/endify/endify/issues"
@@ -26,6 +25,9 @@
       }
     }
   },
+  "bundledDependencies": [
+    "webpack"
+  ],
   "homepage": "https://github.com/endify/endify#readme",
   "dependencies": {
     "@babel/core": "^7.9.6",
@@ -74,5 +76,9 @@
     "webpack-hot-middleware": "^2.25.0",
     "webpack-node-externals": "^1.7.2",
     "yargs": "^15.4.0"
+  },
+  "private": false,
+  "engines": {
+    "node": ">=12.0.0"
   }
 }
