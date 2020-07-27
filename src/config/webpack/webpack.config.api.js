@@ -35,7 +35,6 @@ module.exports = (options) => {
     }),
     webpack: path.join(basePath, 'node_modules/webpack'),
     'webpack-dev-middleware': `commonjs ${path.join(basePath, 'node_modules/webpack-dev-middleware')}`,
-    'http': 'commonjs http',
     'vue-server-renderer': `commonjs ${path.join(basePath, 'node_modules/vue-server-renderer')}`,
     'vue-loader': `commonjs ${path.join(basePath, 'node_modules/vue-loader')}`,
   }
