@@ -31,12 +31,18 @@ const handle = ({paths}) => {
     if(e) {
       return console.log('Compiler error', e)
     }
+    if(stats.errors.length) {
+      return console.log('Vue client stats error', stats.errors)
+    }
     console.log('Vue client compiled')
   })
 
   compilers.vueServer.run((e, stats) => {
     if(e) {
       return console.log('Compiler error', e)
+    }
+    if(stats.errors.length) {
+      return console.log('Vue server stats error', stats.errors)
     }
     console.log('Vue server compiled')
   })
