@@ -14,11 +14,12 @@ module.exports = (options) => {
   const c = {}
 
   const IS_DEV = options.env !== 'production'
-
+  console.log('lol', options)
+  const webpackHotPollPath = path.join(modulesPath, `webpack/hot/poll?${webpackPollInterval}`)
   // console.log(issuerPath, 'asdasd')
   // Get entry file
   if(IS_DEV) {
-    c.entry = [`webpack/hot/poll?${webpackPollInterval}`, entryApiPath]
+    c.entry = [webpackHotPollPath, entryApiPath]
   } else {
     c.entry = entryApiPath
   }
@@ -29,7 +30,7 @@ module.exports = (options) => {
   c.externals = {
     ...nodeExternals({
       whitelist: [
-        `webpack/hot/poll?${webpackPollInterval}`
+        webpackHotPollPath,
       ],
       target: 'node',
       // modulesDir: path.join(basePath, 'node_modules')
@@ -81,14 +82,12 @@ module.exports = (options) => {
     alias: {
       '@project': issuerPath,
     },
-    modules: [path.join(basePath, '/node_modules'), /*path.join(issuerPath, 'node_modules')*/]
+    modules: [path.join(basePath, '/node_modules'), path.join(issuerPath, 'node_modules')]
   }
   //
   c.resolveLoader = {
-    modules: [path.join(basePath, 'node_modules'), /*path.join(issuerPath, 'node_modules')*/]
+    modules: [path.join(basePath, 'node_modules'), path.join(issuerPath, 'node_modules')]
   }
-
-  c.context = path.resolve(basePath)
-  console.log(c)
+  c.context = isSymlinked ? path.resolve(basePath) : path.resolve(issuerPath)
   return c
 }
