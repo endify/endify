@@ -7,36 +7,37 @@ require('dotenv-extended').load();
 module.exports = (options) => {
   const issuerPath = options.issuerPath
   const basePath = options.basePath
+  const isSymlinked = options.isSymlinked
   const entryApiPath = path.resolve(basePath, 'src/entry/api.js')
-
+  const modulesPath = isSymlinked ? path.join(basePath, 'node_modules') : ``
   const webpackPollInterval = 500;
   const c = {}
 
   const IS_DEV = options.env !== 'production'
 
+  // console.log(issuerPath, 'asdasd')
   // Get entry file
   if(IS_DEV) {
-    c.entry = [`webpack/hot/poll.js`, entryApiPath]
+    c.entry = [`webpack/hot/poll?${webpackPollInterval}`, entryApiPath]
   } else {
     c.entry = entryApiPath
   }
 
   // Set target to node
   c.target = 'node'
-
-
+  console.log('wow => ', issuerPath, basePath)
   c.externals = {
     ...nodeExternals({
       whitelist: [
         `webpack/hot/poll?${webpackPollInterval}`
       ],
       target: 'node',
-      modulesDir: path.join(basePath, 'node_modules')
+      // modulesDir: path.join(basePath, 'node_modules')
     }),
-    webpack: path.join(basePath, 'node_modules/webpack'),
-    'webpack-dev-middleware': `commonjs ${path.join(basePath, 'node_modules/webpack-dev-middleware')}`,
-    'vue-server-renderer': `commonjs ${path.join(basePath, 'node_modules/vue-server-renderer')}`,
-    'vue-loader': `commonjs ${path.join(basePath, 'node_modules/vue-loader')}`,
+    webpack: `commonjs ${path.join(modulesPath, 'webpack')}`,
+    'webpack-dev-middleware': `commonjs ${path.join(modulesPath, 'webpack-dev-middleware')}`,
+    'vue-server-renderer': `commonjs ${path.join(modulesPath, 'vue-server-renderer')}`,
+    'vue-loader': `commonjs ${path.join(modulesPath, 'vue-loader')}`,
   }
 
   // Set mode
@@ -80,13 +81,14 @@ module.exports = (options) => {
     alias: {
       '@project': issuerPath,
     },
-    modules: [path.join(basePath, '/node_modules')]
+    modules: [path.join(basePath, '/node_modules'), /*path.join(issuerPath, 'node_modules')*/]
   }
-
+  //
   c.resolveLoader = {
-    modules: [path.join(basePath, 'node_modules')]
+    modules: [path.join(basePath, 'node_modules'), /*path.join(issuerPath, 'node_modules')*/]
   }
 
   c.context = path.resolve(basePath)
+  console.log(c)
   return c
 }

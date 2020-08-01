@@ -4,6 +4,9 @@ const paths = {
   issuerPath: process.cwd(),
   basePath: path.resolve(__dirname, '../../'),
 }
+const relativePath = path.relative(paths.issuerPath, paths.basePath);
+paths.isSymlinked = !(relativePath && !relativePath.startsWith('..') && !path.isAbsolute(relativePath))
+
 const FUNCTIONS = {
   dev: () => {
     require('./handlers/dev')({paths})

@@ -1,4 +1,4 @@
-`![Endify logo](https://github.com/endify/endify/blob/master/endify-header.png)
+![Endify logo](https://github.com/endify/endify/blob/master/endify-header.png)
  
  # Endify (Work in progress)
   JS Framework connecting backend, frontend and native JavaScript based apps
