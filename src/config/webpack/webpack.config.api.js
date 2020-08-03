@@ -11,12 +11,11 @@ module.exports = (options) => {
   const entryApiPath = path.resolve(basePath, 'src/entry/api.js')
   const modulesPath = isSymlinked ? path.join(basePath, 'node_modules') : ``
   const webpackPollInterval = 500;
+  const IS_DEV = options.env !== 'production'
+  const webpackHotPollPath = path.join(modulesPath, `webpack/hot/poll?${webpackPollInterval}`)
+
   const c = {}
 
-  const IS_DEV = options.env !== 'production'
-  console.log('lol', options)
-  const webpackHotPollPath = path.join(modulesPath, `webpack/hot/poll?${webpackPollInterval}`)
-  // console.log(issuerPath, 'asdasd')
   // Get entry file
   if(IS_DEV) {
     c.entry = [webpackHotPollPath, entryApiPath]
@@ -26,7 +25,8 @@ module.exports = (options) => {
 
   // Set target to node
   c.target = 'node'
-  console.log('wow => ', issuerPath, basePath)
+
+  // Externals
   c.externals = {
     ...nodeExternals({
       whitelist: [
@@ -77,6 +77,20 @@ module.exports = (options) => {
   if(IS_DEV) {
     // c.stats = 'errors-only'
   }
+  // c.module = {}
+  // c.module.rules = [
+  //   {
+  //     test: /\.js?$/,
+  //     // exclude: /node_modules/,
+  //     use: {
+  //       loader: 'babel-loader',
+  //       options: {
+  //         presets: ['@babel/preset-env'],
+  //         plugins: ['@babel/plugin-proposal-optional-chaining', '@babel/plugin-transform-modules-commonjs']
+  //       }
+  //     }
+  //   },
+  // ]
 
   c.resolve = {
     alias: {
