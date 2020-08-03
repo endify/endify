@@ -11,25 +11,26 @@ module.exports = (options) => {
   const entryApiPath = path.resolve(basePath, 'src/entry/api.js')
   const modulesPath = isSymlinked ? path.join(basePath, 'node_modules') : ``
   const webpackPollInterval = 500;
+  const IS_DEV = options.env !== 'production'
+  const webpackHotPollPath = path.join(modulesPath, `webpack/hot/poll?${webpackPollInterval}`)
+
   const c = {}
 
-  const IS_DEV = options.env !== 'production'
-
-  // console.log(issuerPath, 'asdasd')
   // Get entry file
   if(IS_DEV) {
-    c.entry = [`webpack/hot/poll?${webpackPollInterval}`, entryApiPath]
+    c.entry = [webpackHotPollPath, entryApiPath]
   } else {
     c.entry = entryApiPath
   }
 
   // Set target to node
   c.target = 'node'
-  console.log('wow => ', issuerPath, basePath)
+
+  // Externals
   c.externals = {
     ...nodeExternals({
       whitelist: [
-        `webpack/hot/poll?${webpackPollInterval}`
+        webpackHotPollPath,
       ],
       target: 'node',
       // modulesDir: path.join(basePath, 'node_modules')
@@ -76,19 +77,31 @@ module.exports = (options) => {
   if(IS_DEV) {
     // c.stats = 'errors-only'
   }
+  // c.module = {}
+  // c.module.rules = [
+  //   {
+  //     test: /\.js?$/,
+  //     // exclude: /node_modules/,
+  //     use: {
+  //       loader: 'babel-loader',
+  //       options: {
+  //         presets: ['@babel/preset-env'],
+  //         plugins: ['@babel/plugin-proposal-optional-chaining', '@babel/plugin-transform-modules-commonjs']
+  //       }
+  //     }
+  //   },
+  // ]
 
   c.resolve = {
     alias: {
       '@project': issuerPath,
     },
-    modules: [path.join(basePath, '/node_modules'), /*path.join(issuerPath, 'node_modules')*/]
+    modules: [path.join(basePath, '/node_modules'), path.join(issuerPath, 'node_modules')]
   }
   //
   c.resolveLoader = {
-    modules: [path.join(basePath, 'node_modules'), /*path.join(issuerPath, 'node_modules')*/]
+    modules: [path.join(basePath, 'node_modules'), path.join(issuerPath, 'node_modules')]
   }
-
-  c.context = path.resolve(basePath)
-  console.log(c)
+  c.context = isSymlinked ? path.resolve(basePath) : path.resolve(issuerPath)
   return c
 }

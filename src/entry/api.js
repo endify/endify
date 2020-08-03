@@ -3,8 +3,6 @@ import path from 'path'
 import dotEnvExtended from 'dotenv-extended';
 import {setupServer} from '../setup/api/setupServer'
 import {VueBundleWatcher} from '../services/VueBundleWatcher'
-import serverWebpackConfig from '../config/webpack/webpack.config.vue.server.js'
-import clientWebpackConfig from '../config/webpack/webpack.config.vue.client.js'
 import endifyServerConfig from '@project/endify.config.server.js'
 
 const vueClientDistPath = path.join(process.env.ISSUER_PATH, '/dist/vue-client')
@@ -28,22 +26,32 @@ const start = async function() {
     path: path.join(process.env.BASE_PATH, '/.env')
   });
 
+  let clientWebpackConfig, serverWebpackConfig
+  if(process.env.NODE_ENV !== 'production') {
+    clientWebpackConfig = require('../config/webpack/webpack.config.vue.client.js')
+    serverWebpackConfig = require('../config/webpack/webpack.config.vue.server.js')
+  }
+
   // Watch for bundle or load it on production
-  vueBundleWatcher = new VueBundleWatcher({
+  const bundleWatcherOptions = {
     serverBundlePath: vueServerBundlePath,
     manifestBundlePath: vueServerClientManifestPath,
     templatePath: vueTemplatePath,
     publicPath: publicDistPath,
-    clientWebpackConfig: clientWebpackConfig({
-      basePath: process.env.BASE_PATH,
-      issuerPath: process.env.ISSUER_PATH,
-    }),
-    serverWebpackConfig: serverWebpackConfig({
-      basePath: process.env.BASE_PATH,
-      issuerPath: process.env.ISSUER_PATH,
-    }),
     bundleRendererBaseDir: process.env.BASE_PATH
-  })
+  }
+  if(process.env.NODE_ENV !== 'production') {
+    bundleWatcherOptions.clientWebpackConfig = clientWebpackConfig({
+      basePath: process.env.BASE_PATH,
+      issuerPath: process.env.ISSUER_PATH,
+    })
+    bundleWatcherOptions.serverWebpackConfig = serverWebpackConfig({
+      basePath: process.env.BASE_PATH,
+      issuerPath: process.env.ISSUER_PATH,
+    })
+  }
+
+  vueBundleWatcher = new VueBundleWatcher(bundleWatcherOptions)
   if(process.env.NODE_ENV === 'production') {
     await vueBundleWatcher.loadRenderer()
   } else {
@@ -59,7 +67,7 @@ const start = async function() {
     console.error(e)
   }
   server = http.createServer(expressApp || undefined)
-    const PORT = endifyServerConfig.port || process.env.PORT || 3000
+  const PORT = endifyServerConfig.port || process.env.PORT || 3000
   server.listen(PORT, () => {
     console.log('Server is listening on port', PORT)
   })
