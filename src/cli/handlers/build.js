@@ -24,14 +24,17 @@ const handle = ({paths}) => {
     if(e) {
       return console.log('Compiler error', e)
     }
-    console.log('Api compiled', stats)
+    if(stats.errors && stats.errors.length) {
+      return console.log('Api stats error', stats.errors)
+    }
+    console.log('Api compiled')
   })
 
   compilers.vueClient.run((e, stats) => {
     if(e) {
       return console.log('Compiler error', e)
     }
-    if(stats.errors.length) {
+    if(stats.errors && stats.errors.length) {
       return console.log('Vue client stats error', stats.errors)
     }
     console.log('Vue client compiled')
@@ -41,7 +44,7 @@ const handle = ({paths}) => {
     if(e) {
       return console.log('Compiler error', e)
     }
-    if(stats.errors.length) {
+    if(stats.errors && stats.errors.length) {
       return console.log('Vue server stats error', stats.errors)
     }
     console.log('Vue server compiled')
