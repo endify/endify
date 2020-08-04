@@ -12,10 +12,16 @@
 <script>
 import {mapGetters} from 'vuex'
 import {titleMixin} from '../helpers/titleMixin'
+import headMixin from '../mixins/headMixin'
 
 export default {
   title() {
     return `${this.error.code} error`
+  },
+  head() {
+    return {
+      title: 'Siemka'
+    }
   },
   computed: {
     ...mapGetters('endify', ['error'])
@@ -25,7 +31,7 @@ export default {
       setTimeout(resolve, 100)
     })
   },
-  mixins: [titleMixin]
+  // mixins: [headMixin]
 }
 </script>
 

@@ -1,12 +1,11 @@
 import http from 'http'
-import express from 'express'
 import path from 'path'
 import dotEnvExtended from 'dotenv-extended';
 import {setupServer} from '../setup/api/setupServer'
 import {VueBundleWatcher} from '../services/VueBundleWatcher'
 import serverWebpackConfig from '../config/webpack/webpack.config.vue.server.js'
 import clientWebpackConfig from '../config/webpack/webpack.config.vue.client.js'
-import endifyServerConfig from 'ISSUER_PATH/endify.config.server.js'
+import endifyServerConfig from '@project/endify.config.server.js'
 
 const vueClientDistPath = path.join(process.env.ISSUER_PATH, '/dist/vue-client')
 const vueServerBundlePath = path.join(process.env.ISSUER_PATH, '/dist/vue-server/vue-ssr-server-bundle.json')
@@ -36,7 +35,8 @@ const start = async function() {
     templatePath: vueTemplatePath,
     publicPath: publicDistPath,
     clientWebpackConfig: clientWebpackConfig(),
-    serverWebpackConfig: serverWebpackConfig()
+    serverWebpackConfig: serverWebpackConfig(),
+    bundleRendererBaseDir: process.env.BASE_PATH
   })
   if(process.env.NODE_ENV === 'production') {
     await vueBundleWatcher.loadRenderer()

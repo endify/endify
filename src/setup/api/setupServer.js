@@ -1,6 +1,7 @@
 import express from 'express'
 import {setupRoutes} from './setupRoutes'
 import {setupContainer} from './setupContainer'
+import {serverConfig} from '../../services/ServerConfigService'
 
 export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
   const container = setupContainer()
@@ -28,6 +29,7 @@ export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
         url: req.url,
         env: {
           API_HOST: process.env.API_HOST,
+          ...serverConfig.clientEnv,
         }
       }
       const html = await vueBundleWatcher.renderer.renderToString(context)

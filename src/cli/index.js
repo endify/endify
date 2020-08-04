@@ -1,20 +1,37 @@
 #!/usr/bin/env node
-const path = require('path')
-const webpack = require('webpack')
-const { spawn } = require('child_process');
-const DEST_PATH = process.cwd()
-const ENTRY_PATH = path.join(DEST_PATH, 'index.js')
-const webpackConfig = require('../config/webpack/webpack.config.api')()
-const compiler = webpack(webpackConfig)
-
-compiler.run((e, stats) => {
-  if(e) {
-    return console.log('Compiler error', e)
+const FUNCTIONS = {
+  dev: () => {
+    require('./handlers/dev')()
+  },
+  build: () => {
+    require('./handlers/build')()
+  },
+  start: () => {
+    console.log('Start function is not supported yet')
   }
-  const apiProcess = spawn('node', [path.join(process.cwd(), '/dist/api/server.js')], {stdio: ['pipe', 'inherit', 'inherit']})
+}
+const DEFAULT_FUNCTION = () => {
+  console.log(`Unknown command "${process.argv[2]}"`)
+}
+const FUNCTION_ALIASES = {
+  '': FUNCTIONS.dev
+}
 
-  apiProcess.on('close', (code) => {
-    console.log(`spawnedApiProcess shut down with code ${code}`);
-  });
-  console.log('Compiled.')
-})
+const getCommandHandler = () => {
+  const firstArg = process.argv[2] || ''
+  if(typeof FUNCTIONS[firstArg] === 'function') {
+    return FUNCTIONS[firstArg]
+  }
+
+  if(typeof FUNCTION_ALIASES[firstArg] === 'function') {
+    return FUNCTION_ALIASES[firstArg]
+  }
+
+  return DEFAULT_FUNCTION
+}
+
+
+const cmdHandler = getCommandHandler()
+
+cmdHandler()
+

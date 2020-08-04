@@ -2,7 +2,7 @@
   "name": "endify",
   "version": "1.0.0",
   "description": "![Endify logo](https://github.com/endify/endify/blob/master/endify-header.png)",
-  "main": "index.js",
+  "main": "src/endify.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env BASE_PATH=$INIT_CWD NODE_ENV=development webpack --config src/config/webpack/webpack.config.api.js"
@@ -55,6 +55,7 @@
     "moment": "^2.26.0",
     "mongoose": "^5.9.10",
     "mysql2": "^2.1.0",
+    "rollup-plugin-node-externals": "^2.2.0",
     "sass": "^1.26.3",
     "sass-loader": "^8.0.2",
     "start-server-webpack-plugin": "^2.2.5",
@@ -71,6 +72,7 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "yargs": "^15.4.0"
   }
 }

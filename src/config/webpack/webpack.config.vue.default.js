@@ -39,7 +39,7 @@ module.exports = () => {
           ]
         },
         {
-          test: /\.(png|jpe?g|gif)$/i,
+          test: /\.(png|jpe?g|gif|svg)$/i,
           use: [
             {
               loader: 'file-loader',
@@ -71,9 +71,9 @@ module.exports = () => {
     ],
     resolve: {
       extensions: ['*', '.js', '.vue', '.json'],
-      modules: [path.join(process.env.BASE_PATH, 'node_modules'), 'node_modules'],
+      modules: ['node_modules', path.join(process.env.BASE_PATH, 'node_modules')],
       alias: {
-          'ISSUER_PATH': process.env.ISSUER_PATH
+          '@project': process.env.ISSUER_PATH
       }
     },
     resolveLoader: {
@@ -82,7 +82,7 @@ module.exports = () => {
   }
 
   if(IS_DEV) {
-    // c.stats = 'errors-only'
+    c.stats = 'errors-only'
     // c.plugins.push(new webpack.NoEmitOnErrorsPlugin())
     c.plugins.push(new FriendlyErrorsWebpackPlugin())
   }
@@ -96,7 +96,7 @@ module.exports = () => {
     'process.env.BASE_PATH': JSON.stringify(process.env.BASE_PATH),
   }))
 
-  c.context = path.join(process.env.BASE_PATH)
+  c.context = path.resolve(process.env.BASE_PATH)
 
   return c
 };
