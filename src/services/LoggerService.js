@@ -1,5 +1,4 @@
 import chalk from 'chalk'
-import callerCallsite from 'caller-callsite'
 
 export class LoggerService {
   contructor() {

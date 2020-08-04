@@ -1,14 +1,22 @@
 #!/usr/bin/env node
+const path = require('path')
+const paths = {
+  issuerPath: process.cwd(),
+  basePath: path.resolve(__dirname, '../../'),
+}
+const relativePath = path.relative(paths.issuerPath, paths.basePath);
+paths.isSymlinked = !(relativePath && !relativePath.startsWith('..') && !path.isAbsolute(relativePath))
+
 const FUNCTIONS = {
   dev: () => {
-    require('./handlers/dev')()
+    require('./handlers/dev')({paths})
   },
   build: () => {
-    require('./handlers/build')()
+    require('./handlers/build')({paths})
   },
   start: () => {
-    console.log('Start function is not supported yet')
-  }
+    require('./handlers/start')()
+  },
 }
 const DEFAULT_FUNCTION = () => {
   console.log(`Unknown command "${process.argv[2]}"`)
