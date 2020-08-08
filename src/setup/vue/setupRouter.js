@@ -8,6 +8,7 @@ export function setupRouter({Vue, vueConfig}) {
   ]
   vueConfig.router = new VueRouter({
     mode: 'history',
-    routes
+    routes,
+    scrollBehavior: clientConfig.scrollBehavior,
   })
 }
