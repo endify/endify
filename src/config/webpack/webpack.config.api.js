@@ -64,8 +64,11 @@ module.exports = (options) => {
   }
 
   c.plugins.push(new webpack.DefinePlugin({
-    'process.env.BASE_PATH': JSON.stringify(basePath),
-    'process.env.ISSUER_PATH': JSON.stringify(issuerPath)
+    '__ENDIFY_ENV__.BASE_PATH': JSON.stringify(basePath),
+    '__ENDIFY_ENV__.ISSUER_PATH': JSON.stringify(issuerPath),
+  }))
+  c.plugins.push(new webpack.DefinePlugin({
+    '__ENDIFY_ENV__': 'process.env',
   }))
 
   // if(!IS_DEV) {

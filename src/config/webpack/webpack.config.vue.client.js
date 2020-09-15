@@ -27,9 +27,17 @@ module.exports = (options) => {
     c.plugins.push(new webpack.HotModuleReplacementPlugin())
   }
 
-  c.plugins.push(new webpack.DefinePlugin({
-    'process.env': '__ENV__',
-  }))
+  // c.target = 'electron-main'
+  const nodeExternals = require('webpack-node-externals')
+  c.externals = {
+    // ...nodeExternals({
+    //   target: 'node',
+    //   // modulesDir: ['node_modules', path.join(process.env.BASE_PATH, 'node_modules')]
+    // }),
+    'fs-extra': 'commonjs2 fs-extra',
+    'fs': 'commonjs2 fs',
+    'electron': 'commonjs2 electron'
+  }
 
   return c
 }

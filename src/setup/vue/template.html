@@ -1,9 +1,8 @@
 <html>
-  <body>
   <head>
     <meta charset="UTF-8">
     {{{typeof endifyHead !== 'undefined' ? endifyHead : ''}}}
-    <script>window.__ENV__ = JSON.parse('{{{JSON.stringify(env)}}}');</script>
+    <script>window.__ENDIFY_ENV__ = JSON.parse('{{{JSON.stringify(env)}}}');</script>
   </head>
   <body>
     <div id="app"><!--vue-ssr-outlet--></div>

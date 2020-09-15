@@ -15,7 +15,7 @@ export class ApiService {
   }
 
   static async request(path, method, options) {
-    const host = process.env.INTERNAL_API_HOST || process.env.API_HOST
+    const host = __ENDIFY_ENV__.INTERNAL_API_HOST || __ENDIFY_ENV__.API_HOST
     const url = host + path
     try {
       const axiosRes = await axios({

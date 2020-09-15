@@ -31,6 +31,8 @@ module.exports = (options) => {
       target: 'node',
       // modulesDir: ['node_modules', path.join(process.env.BASE_PATH, 'node_modules')]
     }),
+    'fs': 'fs',
+    'electron': 'commonjs2 electron'
   }
 
 

@@ -5,10 +5,10 @@ import {setupServer} from '../setup/api/setupServer'
 import {VueBundleWatcher} from '../services/VueBundleWatcher'
 import endifyServerConfig from '@project/endify.config.server.js'
 
-const vueClientDistPath = path.join(process.env.ISSUER_PATH, '/dist/vue-client')
-const vueServerBundlePath = path.join(process.env.ISSUER_PATH, '/dist/vue-server/vue-ssr-server-bundle.json')
-const vueServerClientManifestPath = path.join(process.env.ISSUER_PATH, '/dist/vue-client/vue-ssr-client-manifest.json')
-const vueTemplatePath = path.join(process.env.BASE_PATH, '/src/setup/vue/template.html')
+const vueClientDistPath = path.join(__ENDIFY_ENV__.ISSUER_PATH, '/dist/vue-client')
+const vueServerBundlePath = path.join(__ENDIFY_ENV__.ISSUER_PATH, '/dist/vue-server/vue-ssr-server-bundle.json')
+const vueServerClientManifestPath = path.join(__ENDIFY_ENV__.ISSUER_PATH, '/dist/vue-client/vue-ssr-client-manifest.json')
+const vueTemplatePath = path.join(__ENDIFY_ENV__.BASE_PATH, '/src/setup/vue/template.html')
 const publicDistPath = '/dist'
 
 let currentExpressApp, vueBundleWatcher, server
@@ -22,12 +22,12 @@ const setupServerAdapter = async () => {
 
 const start = async function() {
   dotEnvExtended.load({
-    defaults: path.join(process.env.BASE_PATH, '/.env.defaults'),
-    path: path.join(process.env.BASE_PATH, '/.env')
+    defaults: path.join(__ENDIFY_ENV__.BASE_PATH, '/.env.defaults'),
+    path: path.join(__ENDIFY_ENV__.BASE_PATH, '/.env')
   });
 
   let clientWebpackConfig, serverWebpackConfig
-  if(process.env.NODE_ENV !== 'production') {
+  if(__ENDIFY_ENV__.NODE_ENV !== 'production') {
     clientWebpackConfig = require('../config/webpack/webpack.config.vue.client.js')
     serverWebpackConfig = require('../config/webpack/webpack.config.vue.server.js')
   }
@@ -38,21 +38,21 @@ const start = async function() {
     manifestBundlePath: vueServerClientManifestPath,
     templatePath: vueTemplatePath,
     publicPath: publicDistPath,
-    bundleRendererBaseDir: process.env.BASE_PATH
+    bundleRendererBaseDir: __ENDIFY_ENV__.BASE_PATH
   }
-  if(process.env.NODE_ENV !== 'production') {
+  if(__ENDIFY_ENV__.NODE_ENV !== 'production') {
     bundleWatcherOptions.clientWebpackConfig = clientWebpackConfig({
-      basePath: process.env.BASE_PATH,
-      issuerPath: process.env.ISSUER_PATH,
+      basePath: __ENDIFY_ENV__.BASE_PATH,
+      issuerPath: __ENDIFY_ENV__.ISSUER_PATH,
     })
     bundleWatcherOptions.serverWebpackConfig = serverWebpackConfig({
-      basePath: process.env.BASE_PATH,
-      issuerPath: process.env.ISSUER_PATH,
+      basePath: __ENDIFY_ENV__.BASE_PATH,
+      issuerPath: __ENDIFY_ENV__.ISSUER_PATH,
     })
   }
 
   vueBundleWatcher = new VueBundleWatcher(bundleWatcherOptions)
-  if(process.env.NODE_ENV === 'production') {
+  if(__ENDIFY_ENV__.NODE_ENV === 'production') {
     await vueBundleWatcher.loadRenderer()
   } else {
     vueBundleWatcher.watch()
@@ -67,7 +67,7 @@ const start = async function() {
     console.error(e)
   }
   server = http.createServer(expressApp || undefined)
-  const PORT = endifyServerConfig.port || process.env.PORT || 3000
+  const PORT = endifyServerConfig.port || __ENDIFY_ENV__.PORT || 3000
   server.listen(PORT, () => {
     console.log('Server is listening on port', PORT)
   })

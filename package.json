@@ -39,11 +39,11 @@
     "chalk": "^4.0.0",
     "css-loader": "^3.5.2",
     "dotenv-extended": "^2.8.0",
-    "electron": "^8.2.3",
     "express": "^4.17.1",
     "express-promise-router": "^3.0.3",
     "file-loader": "^6.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^4.4.1",
     "jest": "^25.3.0",
     "sass": "^1.26.3",
     "sass-loader": "^8.0.2",
@@ -66,5 +66,9 @@
   "private": false,
   "engines": {
     "node": ">=12.0.0"
+  },
+  "devDependencies": {
+    "electron": "10.1.2",
+    "electron-builder": "^22.8.0"
   }
 }

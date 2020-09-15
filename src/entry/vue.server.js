@@ -1,5 +1,4 @@
 import {setupApp} from '../setup/vue/setupApp'
-import os from 'os'
 
 function vueEntryServer(context) {
   return new Promise(async (resolve, reject) => {

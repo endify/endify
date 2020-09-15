@@ -11,13 +11,13 @@ export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
 
   app.use('/api', routes)
 
-  if(process.env.NODE_ENV !== 'production') {
+  if(__ENDIFY_ENV__.NODE_ENV !== 'production') {
     app.use(vueBundleWatcher.devMiddleware);
     app.use(vueBundleWatcher.hotMiddleware);
   }
   app.use('/dist', express.static(vueClientDistPath))
   app.use(async (req, res) => {
-    if(process.env.NODE_ENV !== 'production' && !vueBundleWatcher.renderer) {
+    if(__ENDIFY_ENV__.NODE_ENV !== 'production' && !vueBundleWatcher.renderer) {
       await new Promise((resolve, reject) => {
         vueBundleWatcher.once('update', () => {
           resolve()
@@ -28,7 +28,7 @@ export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
       const context = {
         url: req.url,
         env: {
-          API_HOST: process.env.API_HOST,
+          API_HOST: __ENDIFY_ENV__.API_HOST,
           ...serverConfig.clientEnv,
         }
       }
