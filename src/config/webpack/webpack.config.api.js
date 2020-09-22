@@ -100,9 +100,9 @@ module.exports = (options) => {
     // },
     {
       test: /\.(j|t)sx?$/,
-      exclude: /node_modules/,
+      exclude: /node_modules\/(?!(endify)\/).*/,
       use: {
-        loader: "babel-loader",
+        loader: require.resolve("babel-loader"),
         options: {
           cacheDirectory: true,
           babelrc: false,
@@ -112,7 +112,7 @@ module.exports = (options) => {
           plugins: [
             // plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript
             [require.resolve("@babel/plugin-proposal-decorators"), { legacy: true }],
-            [require.resolve("@babel/plugin-proposal-class-properties"), { loose: true }],
+            // [`C:\\Users\\pieczorx\\projects\\friday\\node_modules\\@babel\\plugin-proposal-class-properties\\lib\\index.js`, { loose: true }],
             [require.resolve('babel-plugin-transform-typescript-metadata')],
             [require.resolve("babel-plugin-parameter-decorator"), {legacy: true}],
           ]
