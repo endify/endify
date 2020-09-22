@@ -1,11 +1,13 @@
 import express from 'express'
 import {setupRoutes} from './setupRoutes'
 import {setupContainer} from './setupContainer'
-import {serverConfig} from '../../services/ServerConfigService'
+import {serverConfigService} from '../../services/ServerConfigService'
+import {join} from 'path'
 
 export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
+  const endifyServerConfig = await serverConfigService.getConfig()
   const container = setupContainer()
-  const routes = setupRoutes({container})
+  const routes = await setupRoutes({container})
   const loggerService = container.resolve('loggerService')
   const app = express()
 
@@ -16,6 +18,7 @@ export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
     app.use(vueBundleWatcher.hotMiddleware);
   }
   app.use('/dist', express.static(vueClientDistPath))
+  app.use('/static', express.static(join(__ENDIFY_ENV__.ISSUER_PATH, 'static')))
   app.use(async (req, res) => {
     if(__ENDIFY_ENV__.NODE_ENV !== 'production' && !vueBundleWatcher.renderer) {
       await new Promise((resolve, reject) => {
@@ -29,7 +32,7 @@ export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
         url: req.url,
         env: {
           API_HOST: __ENDIFY_ENV__.API_HOST,
-          ...serverConfig.clientEnv,
+          ...endifyServerConfig.clientEnv,
         }
       }
       const html = await vueBundleWatcher.renderer.renderToString(context)

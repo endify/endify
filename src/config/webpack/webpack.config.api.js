@@ -80,26 +80,54 @@ module.exports = (options) => {
   if(IS_DEV) {
     // c.stats = 'errors-only'
   }
-  // c.module = {}
-  // c.module.rules = [
-  //   {
-  //     test: /\.js?$/,
-  //     // exclude: /node_modules/,
-  //     use: {
-  //       loader: 'babel-loader',
-  //       options: {
-  //         presets: ['@babel/preset-env'],
-  //         plugins: ['@babel/plugin-proposal-optional-chaining', '@babel/plugin-transform-modules-commonjs']
-  //       }
-  //     }
-  //   },
-  // ]
+  c.module = {}
+  c.module.rules = [
+    // {
+    //   test: /\.js?$/,
+    //   // exclude: /node_modules/,
+    //   use: {
+    //     loader: 'babel-loader',
+    //     options: {
+    //       presets: ['@babel/preset-env'],
+    //       plugins: ['@babel/plugin-proposal-optional-chaining']
+    //     }
+    //   }
+    // },
+    // {
+    //   test: /\.tsx?$/,
+    //   use: 'ts-loader',
+    //   exclude: /node_modules/,
+    // },
+    {
+      test: /\.(j|t)sx?$/,
+      exclude: /node_modules/,
+      use: {
+        loader: "babel-loader",
+        options: {
+          cacheDirectory: true,
+          babelrc: false,
+          presets: [
+            require.resolve("@babel/preset-typescript"),
+          ],
+          plugins: [
+            // plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript
+            [require.resolve("@babel/plugin-proposal-decorators"), { legacy: true }],
+            [require.resolve("@babel/plugin-proposal-class-properties"), { loose: true }],
+            [require.resolve('babel-plugin-transform-typescript-metadata')],
+            [require.resolve("babel-plugin-parameter-decorator"), {legacy: true}],
+          ]
+        }
+      }
+    }
+  ]
+  //'@babel/plugin-transform-modules-commonjs'???
 
   c.resolve = {
     alias: {
       '@project': issuerPath,
     },
-    modules: [path.join(basePath, '/node_modules'), path.join(issuerPath, 'node_modules')]
+    modules: [path.join(basePath, '/node_modules'), path.join(issuerPath, 'node_modules')],
+    extensions: [ '.ts', '.tsx', '.js' ],
   }
   //
   c.resolveLoader = {

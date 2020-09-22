@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-const axios = {}
 export class ApiService {
   static get(path, options) {
     return ApiService.request(path, 'GET', options)

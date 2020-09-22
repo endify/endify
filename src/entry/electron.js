@@ -24,6 +24,7 @@ const createWindow = () => {
     const distTemplatePath = path.resolve(__dirname, '../../dist/vue-electron/index.html')
     const mainWindowUrl = `file://${distTemplatePath}`
     mainWindow.loadURL(mainWindowUrl)
+    mainWindow.setMenuBarVisibility(false)
   }
 
 }

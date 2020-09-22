@@ -3,7 +3,7 @@ import path from 'path'
 import dotEnvExtended from 'dotenv-extended';
 import {setupServer} from '../setup/api/setupServer'
 import {VueBundleWatcher} from '../services/VueBundleWatcher'
-import endifyServerConfig from '@project/endify.config.server.js'
+import {serverConfigService} from '../services/ServerConfigService'
 
 const vueClientDistPath = path.join(__ENDIFY_ENV__.ISSUER_PATH, '/dist/vue-client')
 const vueServerBundlePath = path.join(__ENDIFY_ENV__.ISSUER_PATH, '/dist/vue-server/vue-ssr-server-bundle.json')
@@ -21,6 +21,8 @@ const setupServerAdapter = async () => {
 }
 
 const start = async function() {
+  const endifyServerConfig = await serverConfigService.getConfig()
+
   dotEnvExtended.load({
     defaults: path.join(__ENDIFY_ENV__.BASE_PATH, '/.env.defaults'),
     path: path.join(__ENDIFY_ENV__.BASE_PATH, '/.env')
@@ -76,8 +78,9 @@ const start = async function() {
 start()
 
 if (module.hot) {
-  module.hot.accept('../setup/api/setupServer', async () => {
+  module.hot.accept(['../setup/api/setupServer', '@project/endify.config.server.js', '../services/ServerConfigService'], async () => {
     try {
+      serverConfigService.invalidateConfig()
       const expressApp = await setupServerAdapter()
       if(currentExpressApp) {
         server.removeListener('request', currentExpressApp)

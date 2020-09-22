@@ -11,7 +11,7 @@ module.exports = (options) => {
   const c = defaultVueConfig(options)
 
   c.output = {
-    path: path.join(issuerPath, '/dist/vue-electron'),
+    path: path.join(issuerPath, '/dist/client-native'),
     publicPath: './'
   }
 

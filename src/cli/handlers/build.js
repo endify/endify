@@ -1,110 +1,99 @@
 const path = require('path')
+const webpack = require('webpack')
+const builder = require("electron-builder")
+const Platform = builder.Platform
 
-const handle = async ({paths}) => {
-  const webpack = require('webpack')
-  const webpackConfigs = {
-    api: require('../../config/webpack/webpack.config.api.js')({
+const handle = async ({paths, config, argv}) => {
+  const handleWebpackBuild = async (configPath) => {
+    const webpackConfig = require(configPath)({
       ...paths,
       env: 'production',
-    }),
-    vueClient: require('../../config/webpack/webpack.config.vue.client.js')({
-      ...paths,
-      env: 'production',
-    }),
-    vueServer: require('../../config/webpack/webpack.config.vue.server.js')({
-      ...paths,
-      env: 'production',
-    }),
-    vueClientElectron: require('../../config/webpack/webpack.config.vue.electron.js')({
-      ...paths,
-      env: 'production',
-    }),
-  }
-
-  const compilers = {
-    api: webpack(webpackConfigs.api),
-    vueClient: webpack(webpackConfigs.vueClient),
-    vueClientElectron: webpack(webpackConfigs.vueClientElectron),
-    vueServer: webpack(webpackConfigs.vueServer),
-  }
-
-  await new Promise((resolve, reject) => {
-    compilers.vueClientElectron.run((e, stats) => {
-      if(e) {
-        console.log('Electron compiler error', e)
-        return reject(e)
-      }
-      if(stats.errors && stats.errors.length) {
-        console.log('Electron stats error', stats.errors)
-        return reject(stats.errors)
-      }
-      console.log('Electron compiled', stats)
-      resolve()
     })
-  })
-  const builder = require("electron-builder")
-  const Platform = builder.Platform
-  const res = await builder.build({
-    targets: Platform.WINDOWS.createTarget(),
-    config: {
-      appId: 'com.apkeo.sunday-polska-converter',
-      productName: 'SunConverter',
-      copyright: 'Apkeo - Wszystkie Prawa Zastrzeżone',
-      directories: {
-        output: path.join(paths.issuerPath, '/dist/electron'),
-        app: paths.basePath,
-        buildResources: 'assets'
-      },
-      extraMetadata: {
-        main: './src/entry/electron.js',
-        version: '1.0.0',
-        name: 'SunConverter',
-      },
-      files: [
-        '!*/**',
-        './package.json',
-        './src/entry/electron.js',
-        {
-          "from": path.join(paths.issuerPath, 'dist/vue-electron'),
-          "to": "dist/vue-electron",
-          "filter": ["**/*"]
+    const compiler = webpack(webpackConfig)
+    return new Promise((resolve, reject) => {
+      compiler.run((e, stats) => {
+        if (e || (stats.errors && stats.errors.length)) {
+          return reject(e || stats.errors)
         }
-      ],
-      extends: null,
-    }
-  })
+        resolve(stats)
+      })
+    })
+  }
 
-  return console.log('done', res);
+  const targetFunctions = {
+    api() {
+      return handleWebpackBuild('../../config/webpack/webpack.config.api.js')
+    },
+    vueClient() {
+      return handleWebpackBuild('../../config/webpack/webpack.config.vue.client.js')
+    },
+    vueServer() {
+      return handleWebpackBuild('../../config/webpack/webpack.config.vue.server.js')
+    },
+    vueClientElectron() {
+      return handleWebpackBuild('../../config/webpack/webpack.config.vue.electron.js')
+    },
+    async electron(targets) {
+      const electronBuilderConfig = config.electronBuilderConfig || {}
+      return await builder.build({
+        targets,
+        config: {
+          ...electronBuilderConfig,
+          directories: {
+            output: path.join(paths.issuerPath, '/dist/native'),
+            app: paths.basePath,
+            buildResources: path.join(paths.issuerPath, 'src/build')
+          },
+          extraMetadata: {
+            ...(electronBuilderConfig.extraMetadata || {}),
+            main: './src/entry/electron.js',
+          },
+          files: [
+            '!*/**',
+            './package.json',
+            './src/entry/electron.js',
+            {
+              "from": path.join(paths.issuerPath, 'dist/client-native'),
+              "to": "dist/vue-electron",
+              "filter": ["**/*"]
+            }
+          ],
+          extends: null,
+        }
+      })
+    }
+  }
 
-  compilers.api.run((e, stats) => {
-    if(e) {
-      return console.log('Compiler error', e)
-    }
-    if(stats.errors && stats.errors.length) {
-      return console.log('Api stats error', stats.errors)
-    }
-    console.log('Api compiled')
-  })
+  const argvMap = {
+    'api'() {
+      return targetFunctions.api()
+    },
+    async 'client'() {
+      await Promise.all([
+        targetFunctions.vueServer(),
+        targetFunctions.vueClient()
+      ])
+    },
+    'client:native'() {
+      return targetFunctions.vueClientElectron()
+    },
+    'native:win'() {
+      return targetFunctions.electron(Platform.WINDOWS.createTarget())
+    },
+    'native:mac'() {
+      return targetFunctions.electron(Platform.MAC.createTarget())
+    },
+    'native:linux'() {
+      return targetFunctions.electron(Platform.LINUX.createTarget())
+    },
+  }
 
-  compilers.vueClient.run((e, stats) => {
-    if(e) {
-      return console.log('Compiler error', e)
-    }
-    if(stats.errors && stats.errors.length) {
-      return console.log('Vue client stats error', stats.errors)
-    }
-    console.log('Vue client compiled')
-  })
-
-  compilers.vueServer.run((e, stats) => {
-    if(e) {
-      return console.log('Compiler error', e)
-    }
-    if(stats.errors && stats.errors.length) {
-      return console.log('Vue server stats error', stats.errors)
-    }
-    console.log('Vue server compiled')
-  })
+  try {
+    const res = await argvMap[argv[0].split(':').slice(1).join(':')]()
+    console.log('Operation successfull. Thanks for using Endify!')
+  } catch(e) {
+    console.error('An error occurred while trying to build:', e)
+  }
 }
 
 module.exports = handle

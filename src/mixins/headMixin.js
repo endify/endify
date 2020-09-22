@@ -1,38 +1,47 @@
 import {ClientHelper} from '../helpers/ClientHelper'
 
+function defaultHeadValues() {
+  return {
+    title: 'Endify app'
+  }
+}
+function headObjectToValues(head) {
+  let values = {}
+  if(typeof head !== 'object') {
+    return defaultHeadValues()
+  }
+  return {
+    ...values,
+    title: head.title || values.title
+  }
+}
+
 function getHead(vm) {
-  const {head} = vm.$options
-  let headString = head
-
-  if(typeof headString === 'function') {
-    headString = headString.call(vm)
+  let {head} = vm.$options
+  if(typeof head === 'function') {
+    head = head.call(vm)
   }
-
-  if(typeof headString === 'string') {
-    return headString
-  }
-
-  //TODO: Convert object to head and remove plain string option
-  return null
+  return headObjectToValues(head)
 }
 
 const serverHeadMixin = {
   created() {
-    const head = getHead(this)
-    if(head && this.$ssrContext) {
-      this.$ssrContext.endifyHead = head
+    const {title} = getHead(this)
+    if(this.$ssrContext) {
+      this.$ssrContext.endifyHead = `
+      <title>${title}</title>
+      `
     }
   }
 }
 
 const clientHeadMixin = {
-  // mounted() {
-  //   const {title} = getHead(this)
-  //   if (title) {
-  //     document.title = title
-  //   }
-  //   //TODO: Head logic
-  // }
+  mounted() {
+    const {title} = getHead(this)
+    if (title) {
+      document.title = title
+    }
+  }
 }
 
 export default typeof ClientHelper.isServer ? serverHeadMixin : clientHeadMixin

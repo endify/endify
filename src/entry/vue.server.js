@@ -1,5 +1,4 @@
 import {setupApp} from '../setup/vue/setupApp'
-
 function vueEntryServer(context) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -26,6 +25,7 @@ function vueEntryServer(context) {
         }
 
         context.state = store.state
+        context.meta = vueApp.$meta()
         resolve(vueApp)
       }
 

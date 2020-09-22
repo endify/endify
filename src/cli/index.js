@@ -6,23 +6,35 @@ const paths = {
 }
 const relativePath = path.relative(paths.issuerPath, paths.basePath);
 paths.isSymlinked = !(relativePath && !relativePath.startsWith('..') && !path.isAbsolute(relativePath))
+const config = require(path.join(paths.issuerPath, 'endify.config.build.js'))
 
+const handlerInfoObject = {
+  paths,
+  config,
+  argv: process.argv.slice(2)
+}
 const FUNCTIONS = {
   dev: () => {
-    require('./handlers/dev')({paths})
+    require('./handlers/dev')(handlerInfoObject)
   },
-  build: () => {
-    require('./handlers/build')({paths})
+  'build:api': () => {
+    require('./handlers/build')(handlerInfoObject)
   },
   start: () => {
-    require('./handlers/start')()
+    require('./handlers/start')(handlerInfoObject)
   },
 }
 const DEFAULT_FUNCTION = () => {
   console.log(`Unknown command "${process.argv[2]}"`)
 }
 const FUNCTION_ALIASES = {
-  '': FUNCTIONS.dev
+  '': FUNCTIONS.dev,
+  'build:api': FUNCTIONS['build:api'],
+  'build:client': FUNCTIONS['build:api'],
+  'build:client:native': FUNCTIONS['build:api'],
+  'build:native:win': FUNCTIONS['build:api'],
+  'build:native:mac': FUNCTIONS['build:api'],
+  'build:native:linux': FUNCTIONS['build:api'],
 }
 
 const getCommandHandler = () => {

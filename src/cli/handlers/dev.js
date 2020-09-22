@@ -10,11 +10,16 @@ const handle = ({paths}) => {
     ...paths,
   })
   const compiler = webpack(webpackConfig)
-
-  compiler.run((e) => {
+  let done = false
+  compiler.watch({}, (e) => {
     if(e) {
       return console.log('Compiler error', e)
     }
+    console.log('Api compiled')
+    if(done) {
+      return
+    }
+    done = true
     const apiProcess = spawn('node', [path.join(DEST_PATH, '/dist/api/server.js')], {stdio: ['pipe', 'inherit', 'inherit']})
     const electronProcess = spawn(electron, [path.join(paths.basePath, '/src/entry/electron.js')], {
       stdio: ['pipe', 'inherit', 'inherit'],
