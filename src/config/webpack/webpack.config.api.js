@@ -112,7 +112,7 @@ module.exports = (options) => {
           plugins: [
             // plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript
             [require.resolve("@babel/plugin-proposal-decorators"), { legacy: true }],
-            // [`C:\\Users\\pieczorx\\projects\\friday\\node_modules\\@babel\\plugin-proposal-class-properties\\lib\\index.js`, { loose: true }],
+            [require.resolve("@babel/plugin-proposal-class-properties"), { loose: true }],
             [require.resolve('babel-plugin-transform-typescript-metadata')],
             [require.resolve("babel-plugin-parameter-decorator"), {legacy: true}],
           ]
