@@ -126,7 +126,7 @@ module.exports = (options) => {
     alias: {
       '@project': issuerPath,
     },
-    modules: [path.join(basePath, '/node_modules'), path.join(issuerPath, 'node_modules')],
+    modules: ['node_modules', path.join(basePath, 'node_modules'), path.join(issuerPath, 'node_modules')],
     extensions: [ '.ts', '.tsx', '.js' ],
   }
   //
