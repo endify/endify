@@ -1,6 +1,6 @@
 {
   "name": "endify",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Vue.js on front, Node.js behind, Electron ready, Mobile soon - All in one codebase",
   "main": "src/endify.js",
   "scripts": {
