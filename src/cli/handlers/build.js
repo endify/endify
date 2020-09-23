@@ -34,6 +34,7 @@ const handle = async ({paths, config, argv}) => {
       return handleWebpackBuild('../../config/webpack/webpack.config.vue.electron.js')
     },
     async electron(targets) {
+      const electronEntryPath = path.join(paths.basePath, './src/entry/electron.js')
       const electronBuilderConfig = config.electronBuilderConfig || {}
       return await builder.build({
         targets,
@@ -41,20 +42,20 @@ const handle = async ({paths, config, argv}) => {
           ...electronBuilderConfig,
           directories: {
             output: path.join(paths.issuerPath, '/dist/native'),
-            app: paths.basePath,
+            app: paths.issuerPath,
             buildResources: path.join(paths.issuerPath, 'src/build')
           },
           extraMetadata: {
             ...(electronBuilderConfig.extraMetadata || {}),
-            main: './src/entry/electron.js',
+            main: electronEntryPath,
           },
           files: [
             '!*/**',
             './package.json',
-            './src/entry/electron.js',
+            path.relative(paths.issuerPath, electronEntryPath),
             {
               "from": path.join(paths.issuerPath, 'dist/client-native'),
-              "to": "dist/vue-electron",
+              "to": "dist/client-native",
               "filter": ["**/*"]
             }
           ],
