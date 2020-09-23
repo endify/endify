@@ -1,12 +1,12 @@
 const webpack = require('webpack')
 const path = require('path')
-const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const defaultVueConfig = require('./webpack.config.vue.client.js')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (options) => {
   const basePath = options.basePath
   const issuerPath = options.issuerPath
+  const buildConfig = options.buildConfig
   const IS_DEV = options.env !== 'production'
   const c = defaultVueConfig(options)
 
@@ -19,6 +19,14 @@ module.exports = (options) => {
     template: path.join(basePath, 'src/setup/electron/index.html')
   }))
   c.target = 'electron-renderer'
+
+  if(buildConfig.clientEnv) {
+    const environmentVariables = {}
+    Object.keys(buildConfig.clientEnv).forEach(key => {
+      environmentVariables[`__ENDIFY_ENV__${key}`] = buildConfig.clientEnv[key]
+    })
+    c.plugins.push(new webpack.DefinePlugin(environmentVariables))
+  }
 
   // const nodeExternals = require('webpack-node-externals')
   // c.externals = {

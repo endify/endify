@@ -7,6 +7,7 @@ const handle = async ({paths, config, argv}) => {
   const handleWebpackBuild = async (configPath) => {
     const webpackConfig = require(configPath)({
       ...paths,
+      buildConfig: config,
       env: 'production',
     })
     const compiler = webpack(webpackConfig)
