@@ -23,10 +23,14 @@ module.exports = (options) => {
   if(buildConfig.clientEnv) {
     const environmentVariables = {}
     Object.keys(buildConfig.clientEnv).forEach(key => {
-      environmentVariables[`__ENDIFY_ENV__${key}`] = buildConfig.clientEnv[key]
+      environmentVariables[`__ENDIFY_ENV__.${key}`] = JSON.stringify(buildConfig.clientEnv[key])
     })
     c.plugins.push(new webpack.DefinePlugin(environmentVariables))
   }
+
+  c.plugins.push(new webpack.DefinePlugin({
+    '__ENDIFY_ENV__': JSON.stringify({})
+  }))
 
   // const nodeExternals = require('webpack-node-externals')
   // c.externals = {
