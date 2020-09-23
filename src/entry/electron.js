@@ -21,7 +21,7 @@ const createWindow = () => {
   if(IS_DEV) {
     mainWindow.loadURL(`http://localhost:${process.env.PORT}`)
   } else {
-    const distTemplatePath = path.resolve(__dirname, '../../dist/vue-electron/index.html')
+    const distTemplatePath = path.resolve(__dirname, '../../dist/client-native/index.html')
     const mainWindowUrl = `file://${distTemplatePath}`
     mainWindow.loadURL(mainWindowUrl)
     mainWindow.setMenuBarVisibility(false)

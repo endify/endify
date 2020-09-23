@@ -47,12 +47,16 @@ const handle = async ({paths, config, argv}) => {
           },
           extraMetadata: {
             ...(electronBuilderConfig.extraMetadata || {}),
-            main: electronEntryPath,
+            main: './endify/entry/electron.js',
           },
           files: [
             '!*/**',
             './package.json',
-            path.relative(paths.issuerPath, electronEntryPath),
+            {
+              "from": path.resolve(electronEntryPath, '../'),
+              "to": "endify/entry",
+              "filter": ["electron.js"]
+            },
             {
               "from": path.join(paths.issuerPath, 'dist/client-native'),
               "to": "dist/client-native",
