@@ -65,7 +65,8 @@ const handle = async ({paths, config, argv}) => {
             }
           ],
           extends: null,
-        }
+        },
+        publish: 'always'
       })
     }
   }
