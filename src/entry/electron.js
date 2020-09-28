@@ -25,6 +25,13 @@ const createWindow = () => {
     const mainWindowUrl = `file://${distTemplatePath}`
     mainWindow.loadURL(mainWindowUrl)
     mainWindow.setMenuBarVisibility(false)
+
+    const {autoUpdater} = require("electron-updater");
+
+    const log = require("electron-log")
+    log.transports.file.level = "debug"
+    autoUpdater.logger = log
+    autoUpdater.checkForUpdatesAndNotify()
   }
 
 }
