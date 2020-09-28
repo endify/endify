@@ -27,20 +27,31 @@ module.exports = (options) => {
   c.target = 'node'
 
   // Externals
-  c.externals = {
-    ...nodeExternals({
-      whitelist: [
+  // c.externals = {
+  //   ...nodeExternals({
+  //     allowlist: [
+  //       webpackHotPollPath,
+  //     ],
+  //     target: 'node',
+  //     modulesDir: path.join(issuerPath, 'node_modules'),
+  //     additionalModuleDirs: ['node_modules', path.join(basePath, 'node_modules'), issuerPath, basePath]
+  //   }),
+  //   'webpack': `commonjs webpack`,
+  //   'webpack-dev-middleware': `commonjs webpack-dev-middleware`,
+  //   'vue-server-renderer': `commonjs vue-server-renderer`,
+  //   'vue-loader': `commonjs vue-loader`,
+  //   // 'argon2': 'commonjs argon2'
+  // }
+  c.externals = [
+    nodeExternals({
+      allowlist: [
         webpackHotPollPath,
       ],
       target: 'node',
-      // modulesDir: path.join(basePath, 'node_modules')
+      modulesDir: path.join(issuerPath, 'node_modules'),
+      additionalModuleDirs: ['node_modules', path.join(basePath, 'node_modules'), issuerPath, basePath]
     }),
-    webpack: `commonjs ${path.join(modulesPath, 'webpack')}`,
-    'webpack-dev-middleware': `commonjs ${path.join(modulesPath, 'webpack-dev-middleware')}`,
-    'vue-server-renderer': `commonjs ${path.join(modulesPath, 'vue-server-renderer')}`,
-    'vue-loader': `commonjs ${path.join(modulesPath, 'vue-loader')}`,
-  }
-
+  ]
   // Set mode
   c.mode = IS_DEV ? 'development' : 'production'
 
@@ -126,13 +137,15 @@ module.exports = (options) => {
     alias: {
       '@project': issuerPath,
     },
-    modules: ['node_modules', path.join(basePath, 'node_modules'), path.join(issuerPath, 'node_modules')],
-    extensions: [ '.ts', '.tsx', '.js' ],
+    modules: [basePath, issuerPath, 'node_modules', path.join(basePath, 'node_modules'), path.join(issuerPath, 'node_modules')],
+    extensions: [ '.ts', '.tsx', '.js', '.node', '.json' ],
   }
-  //
   c.resolveLoader = {
     modules: [path.join(basePath, 'node_modules'), path.join(issuerPath, 'node_modules')]
   }
   c.context = isSymlinked ? path.resolve(basePath) : path.resolve(issuerPath)
+  c.node = {
+    __dirname: true
+  }
   return c
 }

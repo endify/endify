@@ -11,7 +11,7 @@ const handle = ({paths}) => {
   })
   const compiler = webpack(webpackConfig)
   let done = false
-  compiler.watch({}, (e) => {
+  compiler.watch({}, (e, stats) => {
     if(e) {
       return console.log('Compiler error', e)
     }
