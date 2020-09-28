@@ -47,6 +47,8 @@
     "dotenv-extended": "^2.8.0",
     "electron": "^10.1.2",
     "electron-builder": "^22.8.1",
+    "electron-log": "^4.2.4",
+    "electron-updater": "^4.3.5",
     "express": "^4.17.1",
     "express-promise-router": "^3.0.3",
     "file-loader": "^6.0.0",
