@@ -90,7 +90,7 @@ module.exports = (options) => {
     c.plugins.push(new FriendlyErrorsWebpackPlugin())
   }
 
-  const packageJsonContent = fs.readFileSync(path.join(basePath, 'package.json'), 'utf-8')
+  const packageJsonContent = fs.readFileSync(path.join(issuerPath, 'package.json'), 'utf-8')
   const packageJson = JSON.parse(packageJsonContent)
   const version = packageJson.version
 
