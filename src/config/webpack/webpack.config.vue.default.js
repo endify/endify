@@ -76,7 +76,8 @@ module.exports = (options) => {
       extensions: ['*', '.js', '.vue', '.json'],
       modules: ['node_modules', path.join(basePath, 'node_modules')],
       alias: {
-          '@project': issuerPath
+        '@project': issuerPath,
+        'endify/server': path.join(basePath, 'server/index.ts'),
       }
     },
     resolveLoader: {

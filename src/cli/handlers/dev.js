@@ -3,7 +3,7 @@ const handle = ({paths}) => {
   const webpack = require('webpack')
   const { spawn } = require('child_process');
   const DEST_PATH = process.cwd()
-  const ENTRY_PATH = path.join(DEST_PATH, 'index.js')
+  const ENTRY_PATH = path.join(DEST_PATH, 'index.ts')
   const electron = require('electron')
   const webpackConfig = require('../../config/webpack/webpack.config.api')({
     env: 'development',
@@ -20,7 +20,7 @@ const handle = ({paths}) => {
       return
     }
     done = true
-    const apiProcess = spawn('node', [path.join(DEST_PATH, '/dist/api/server.js')], {stdio: ['pipe', 'inherit', 'inherit']})
+    const apiProcess = spawn('node', ['--inspect=9229', path.join(DEST_PATH, '/dist/api/server.js')], {stdio: ['pipe', 'inherit', 'inherit']})
     const electronProcess = spawn(electron, [path.join(paths.basePath, '/src/entry/electron.js')], {
       stdio: ['pipe', 'inherit', 'inherit'],
       windowsHide: false,

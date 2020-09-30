@@ -46,6 +46,9 @@ module.exports = (options) => {
     nodeExternals({
       allowlist: [
         webpackHotPollPath,
+        basePath,
+        'endify',
+        'endify/server'
       ],
       target: 'node',
       modulesDir: path.join(issuerPath, 'node_modules'),
@@ -126,6 +129,7 @@ module.exports = (options) => {
             [require.resolve("@babel/plugin-proposal-class-properties"), { loose: true }],
             [require.resolve('babel-plugin-transform-typescript-metadata')],
             [require.resolve("babel-plugin-parameter-decorator"), {legacy: true}],
+            require.resolve("@babel/plugin-proposal-optional-chaining")
           ]
         }
       }
@@ -147,5 +151,6 @@ module.exports = (options) => {
   c.node = {
     __dirname: true
   }
+  c.devtool = 'source-map'
   return c
 }

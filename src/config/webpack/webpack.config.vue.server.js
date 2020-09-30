@@ -35,19 +35,5 @@ module.exports = (options) => {
     'electron': 'commonjs2 electron'
   }
 
-
-
-  // c.externals = {
-  //   ...nodeExternals({
-  //     modulesDir: [path.join(process.env.BASE_PATH, 'node_modules'), path.join(process.env.ISSUER_PATH, 'node_modules')]
-  //   }),
-  //   'path': 'commonjs path'
-  //   // 'vue': 'commonjs vue'
-  // }
-
-  // if(IS_DEV) {
-  //   c.plugins.push(new webpack.NoEmitOnErrorsPlugin())
-  // }
-
   return c
 }
