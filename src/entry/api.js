@@ -29,7 +29,7 @@ const start = async function() {
   });
 
   let clientWebpackConfig, serverWebpackConfig
-  if(__ENDIFY_ENV__.NODE_ENV !== 'production') {
+  if(__ENDIFY_ENV__.ENV !== 'production') {
     clientWebpackConfig = require('../config/webpack/webpack.config.vue.client.js')
     serverWebpackConfig = require('../config/webpack/webpack.config.vue.server.js')
   }
@@ -42,7 +42,7 @@ const start = async function() {
     publicPath: publicDistPath,
     bundleRendererBaseDir: __ENDIFY_ENV__.BASE_PATH
   }
-  if(__ENDIFY_ENV__.NODE_ENV !== 'production') {
+  if(__ENDIFY_ENV__.ENV !== 'production') {
     bundleWatcherOptions.clientWebpackConfig = clientWebpackConfig({
       basePath: __ENDIFY_ENV__.BASE_PATH,
       issuerPath: __ENDIFY_ENV__.ISSUER_PATH,
@@ -54,7 +54,7 @@ const start = async function() {
   }
 
   vueBundleWatcher = new VueBundleWatcher(bundleWatcherOptions)
-  if(__ENDIFY_ENV__.NODE_ENV === 'production') {
+  if(__ENDIFY_ENV__.ENV === 'production') {
     await vueBundleWatcher.loadRenderer()
   } else {
     vueBundleWatcher.watch()

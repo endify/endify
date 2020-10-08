@@ -29,7 +29,7 @@ module.exports = (options) => {
   }
 
   c.plugins.push(new webpack.DefinePlugin({
-    '__ENDIFY_ENV__': JSON.stringify({})
+    'process.env': JSON.stringify({})
   }))
 
   // const nodeExternals = require('webpack-node-externals')

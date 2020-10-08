@@ -1,55 +1,76 @@
 import {setupApp} from '../setup/vue/setupApp'
 const {vueApp, vueConfig: {router, store}} = setupApp()
 
-if (window.__INITIAL_STATE__) {
-  store.replaceState(window.__INITIAL_STATE__)
-}
-
-router.onReady(() => {
-  router.beforeResolve(async (to, from, next) => {
-    const finishRequest = (options) => {
-      if(!options) {
-        options = {}
-      }
-      if(!options.statusCode) {
-        options.statusCode = 200
-      }
-      if(options.statusCode === 200) {
-        store.commit('endify/REMOVE_ERROR')
-      } else {
-        store.commit('endify/SET_ERROR', {
-          code: options.statusCode
-        })
-      }
-      store.commit('endify/SET_ROUTE_LOADING_STATUS', false)
-      next()
+const beforeResolveAction = async (to, from, next) => {
+  const finishRequest = (options) => {
+    if(!options) {
+      options = {}
     }
-
-    const matched = router.getMatchedComponents(to)
-    if(!matched.length) {
-      return finishRequest({
-        statusCode: 404
+    if(!options.statusCode) {
+      options.statusCode = 200
+    }
+    if(options.statusCode === 200) {
+      store.commit('endify/REMOVE_ERROR')
+    } else {
+      store.commit('endify/SET_ERROR', {
+        code: options.statusCode
       })
     }
-    const prevMatched = router.getMatchedComponents(from)
-    let diffed = false
-    const activated = matched.filter((c, i) => {
-      return diffed || (diffed = (prevMatched[i] !== c))
+    store.commit('endify/SET_ROUTE_LOADING_STATUS', false)
+    next()
+  }
+
+  const matched = router.getMatchedComponents(to)
+  if(!matched.length) {
+    return finishRequest({
+      statusCode: 404
     })
-    const asyncDataHooks = activated.map(c => c.asyncData).filter(_ => _)
+  }
+  const prevMatched = router.getMatchedComponents(from)
+  let diffed = false
+  const activated = matched.filter((c, i) => {
+    return diffed || (diffed = (prevMatched[i] !== c))
+  })
+  const asyncDataHooks = activated.map(c => c.asyncData).filter(_ => _)
 
-    store.commit('endify/SET_ROUTE_LOADING_STATUS', true)
+  store.commit('endify/SET_ROUTE_LOADING_STATUS', true)
 
-    try {
-      await Promise.all(asyncDataHooks.map(hook => hook({ store, route: to })))
+  let wasRedirectCalled = false
+  const redirect = (route) => {
+    wasRedirectCalled = true
+    next(route)
+  }
+
+  try {
+    await Promise.all(asyncDataHooks.map(hook => hook({
+      store,
+      route: to,
+      redirect,
+    })))
+    if(!wasRedirectCalled) {
       return finishRequest({
         statusCode: 200
       })
-    } catch(e) {
+    }
+  } catch(e) {
+    if(!wasRedirectCalled) {
       return finishRequest({
         statusCode: 500
       })
     }
-  })
+  }
+}
+let wasAsyncCalledOnSsr = false
+if (window.__INITIAL_STATE__) {
+  wasAsyncCalledOnSsr = true
+  store.replaceState(window.__INITIAL_STATE__)
+}
+if(!wasAsyncCalledOnSsr) {
+  router.beforeResolve(beforeResolveAction)
+}
+router.onReady(() => {
+  if(wasAsyncCalledOnSsr) {
+    router.beforeResolve(beforeResolveAction)
+  }
   vueApp.$mount('#app')
 })

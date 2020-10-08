@@ -1,4 +1,5 @@
 import {setupApp} from '../setup/vue/setupApp'
+
 function vueEntryServer(context) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -40,9 +41,18 @@ function vueEntryServer(context) {
           statusCode: 404
         })
       }
+      let wasRedirectCalled = false
+      const redirect = (route) => {
+        wasRedirectCalled = true
+        const resolvedRoute = router.resolve(route)
+        console.log('yyy', resolvedRoute)
+        reject({url: resolvedRoute.href})
+      }
       const asyncPromises = matchedComponents.map(({ asyncData }) => asyncData && asyncData({
         store,
-        route: router.currentRoute
+        route: router.currentRoute,
+        redirect,
+        request: context.request,
       }))
 
       try {
@@ -52,7 +62,9 @@ function vueEntryServer(context) {
           statusCode: 500
         })
       }
-      finishRequest()
+      if(!wasRedirectCalled) {
+        finishRequest()
+      }
     } catch(e) {
       reject(e)
     }

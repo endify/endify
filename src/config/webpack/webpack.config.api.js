@@ -151,6 +151,6 @@ module.exports = (options) => {
   c.node = {
     __dirname: true
   }
-  c.devtool = 'source-map'
+  c.devtool = 'eval-source-map'
   return c
 }

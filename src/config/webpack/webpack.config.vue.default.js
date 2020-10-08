@@ -57,13 +57,24 @@ module.exports = (options) => {
           loader: 'vue-loader'
         },
         {
-          test: /\.js?$/,
-          // exclude: /node_modules/,
+          test: /\.(j|t)sx?$/,
+          exclude: /node_modules\/(?!(endify)\/).*/,
           use: {
-            loader: 'babel-loader',
+            loader: require.resolve("babel-loader"),
             options: {
-              // presets: ['@babel/preset-env'],
-              // plugins: ['@babel/plugin-proposal-optional-chaining']
+              cacheDirectory: true,
+              babelrc: false,
+              presets: [
+                require.resolve("@babel/preset-typescript"),
+              ],
+              plugins: [
+                // plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript
+                [require.resolve("@babel/plugin-proposal-decorators"), { legacy: true }],
+                [require.resolve("@babel/plugin-proposal-class-properties"), { loose: true }],
+                [require.resolve('babel-plugin-transform-typescript-metadata')],
+                [require.resolve("babel-plugin-parameter-decorator"), {legacy: true}],
+                require.resolve("@babel/plugin-proposal-optional-chaining")
+              ]
             }
           }
         },
@@ -73,7 +84,7 @@ module.exports = (options) => {
       new VueLoaderPlugin(),
     ],
     resolve: {
-      extensions: ['*', '.js', '.vue', '.json'],
+      extensions: ['.ts', '.tsx', '.js', '.vue', '.json'],
       modules: ['node_modules', path.join(basePath, 'node_modules')],
       alias: {
         '@project': issuerPath,
