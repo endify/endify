@@ -53,6 +53,7 @@ const handle = async ({paths, config, argv}) => {
           files: [
             '!*/**',
             './package.json',
+            './node_modules/electron-updater/**',
             {
               "from": path.resolve(electronEntryPath, '../'),
               "to": "endify/entry",
