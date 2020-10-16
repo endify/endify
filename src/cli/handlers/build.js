@@ -53,7 +53,6 @@ const handle = async ({paths, config, argv}) => {
           files: [
             '!*/**',
             './package.json',
-            './node_modules/electron-updater/**',
             {
               "from": path.resolve(electronEntryPath, '../'),
               "to": "endify/entry",
@@ -63,6 +62,11 @@ const handle = async ({paths, config, argv}) => {
               "from": path.join(paths.issuerPath, 'dist/client-native'),
               "to": "dist/client-native",
               "filter": ["**/*"]
+            },
+            {
+              "from": path.join(paths.issuerPath, 'node_modules'),
+              "to": "node_modules",
+              "filter": ["**/*", '!./endify/**']
             }
           ],
           extends: null,

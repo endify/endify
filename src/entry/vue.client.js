@@ -27,10 +27,11 @@ const beforeResolveAction = async (to, from, next) => {
     })
   }
   const prevMatched = router.getMatchedComponents(from)
-  let diffed = false
-  const activated = matched.filter((c, i) => {
-    return diffed || (diffed = (prevMatched[i] !== c))
-  })
+  // let diffed = false
+  // const activated = matched.filter((c, i) => {
+  //   return diffed || (diffed = (prevMatched[i] !== c))
+  // })
+  const activated = matched
   const asyncDataHooks = activated.map(c => c.asyncData).filter(_ => _)
 
   store.commit('endify/SET_ROUTE_LOADING_STATUS', true)
