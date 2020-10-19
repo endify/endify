@@ -83,6 +83,7 @@ module.exports = (options) => {
   }))
   c.plugins.push(new webpack.DefinePlugin({
     '__ENDIFY_ENV__': 'process.env',
+    '__ENDIFY_ENV__.ENV': JSON.stringify(options.env)
   }))
 
   // if(!IS_DEV) {

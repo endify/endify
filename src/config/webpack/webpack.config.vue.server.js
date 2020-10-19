@@ -24,7 +24,7 @@ module.exports = (options) => {
 
   c.plugins.push(new webpack.DefinePlugin({
     'process.env.NODE_PATH': JSON.stringify(path.join(issuerPath, '/node_modules')),
-    '__ENDIFY_ENV__.ENV': JSON.stringify(process.env.NODE_ENV),
+    '__ENDIFY_ENV__.ENV': JSON.stringify(options.env),
   }))
   c.plugins.push(new webpack.DefinePlugin({
     '__ENDIFY_ENV__': JSON.stringify({}),
