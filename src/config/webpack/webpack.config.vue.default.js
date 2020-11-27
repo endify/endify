@@ -78,6 +78,11 @@ module.exports = (options) => {
             }
           }
         },
+        {
+          test: /\.ya?ml$/,
+          use: 'yaml-loader',
+          type: 'json'
+        }
       ]
     },
     plugins: [

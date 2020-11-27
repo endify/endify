@@ -1,9 +1,10 @@
 import {setupApp} from '../setup/vue/setupApp'
+import {clientConfig} from '../services/ClientConfigService'
 
 function vueEntryServer(context) {
   return new Promise(async (resolve, reject) => {
     try {
-      const {vueApp, vueConfig: {router, store}} = setupApp()
+      const {vueApp, vueConfig: {router, store}, clientConfig} = setupApp()
       const {fullPath} = router.resolve(context.url).route
       if (fullPath !== context.url) {
         throw ({url: fullPath})
@@ -45,14 +46,19 @@ function vueEntryServer(context) {
       const redirect = (route) => {
         wasRedirectCalled = true
         const resolvedRoute = router.resolve(route)
-        console.log('yyy', resolvedRoute)
         reject({url: resolvedRoute.href})
       }
+      const componentstoCallAsyncData = [
+        clientConfig.mainComponent,
+        ...matchedComponents
+      ]
       const asyncPromises = matchedComponents.map(({ asyncData }) => asyncData && asyncData({
         store,
         route: router.currentRoute,
         redirect,
         request: context.request,
+        url: context.url,
+        vueApp,
       }))
 
       try {

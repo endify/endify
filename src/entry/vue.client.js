@@ -1,5 +1,5 @@
 import {setupApp} from '../setup/vue/setupApp'
-const {vueApp, vueConfig: {router, store}} = setupApp()
+const {vueApp, vueConfig: {router, store}, clientConfig} = setupApp()
 
 const beforeResolveAction = async (to, from, next) => {
   const finishRequest = (options) => {
@@ -32,7 +32,13 @@ const beforeResolveAction = async (to, from, next) => {
   //   return diffed || (diffed = (prevMatched[i] !== c))
   // })
   const activated = matched
-  const asyncDataHooks = activated.map(c => c.asyncData).filter(_ => _)
+
+  const componentstoCallAsyncData = [
+    clientConfig.mainComponent,
+    ...activated
+  ]
+
+  const asyncDataHooks = componentstoCallAsyncData.map(c => c.asyncData).filter(_ => _)
 
   store.commit('endify/SET_ROUTE_LOADING_STATUS', true)
 
@@ -47,6 +53,8 @@ const beforeResolveAction = async (to, from, next) => {
       store,
       route: to,
       redirect,
+      url: window.location.href,
+      vueApp
     })))
     if(!wasRedirectCalled) {
       return finishRequest({
@@ -54,6 +62,7 @@ const beforeResolveAction = async (to, from, next) => {
       })
     }
   } catch(e) {
+    console.error(e)
     if(!wasRedirectCalled) {
       return finishRequest({
         statusCode: 500
