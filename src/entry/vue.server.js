@@ -5,11 +5,11 @@ function vueEntryServer(context) {
   return new Promise(async (resolve, reject) => {
     try {
       const {vueApp, vueConfig: {router, store}, clientConfig} = setupApp()
-      const {fullPath} = router.resolve(context.url).route
-      if (fullPath !== context.url) {
-        throw ({url: fullPath})
+      const {fullPath} = router.resolve(context.path).route
+      if (fullPath !== context.path) {
+        throw ({redirectUrl: fullPath})
       }
-      router.push(context.url)
+      router.push(context.path)
       const finishRequest = (options) => {
         if(!options) {
           options = {}
@@ -46,7 +46,7 @@ function vueEntryServer(context) {
       const redirect = (route) => {
         wasRedirectCalled = true
         const resolvedRoute = router.resolve(route)
-        reject({url: resolvedRoute.href})
+        reject({redirectUrl: resolvedRoute.href})
       }
       const componentstoCallAsyncData = [
         clientConfig.mainComponent,

@@ -29,8 +29,10 @@ export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
     }
 
     try {
+      const url = req.protocol + '://' + req.get('host') + req.originalUrl;
       const context = {
-        url: req.url,
+        url,
+        path: req.url,
         env: {
           API_HOST: __ENDIFY_ENV__.API_HOST,
           ...endifyServerConfig.clientEnv,
@@ -40,8 +42,8 @@ export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
       const html = await vueBundleWatcher.renderer.renderToString(context)
       res.status(typeof context.statusCode === 'undefined' ? 200 : context.statusCode).end(html)
     } catch(e) {
-      if(e.url) {
-        return res.redirect(e.url)
+      if(e.redirectUrl) {
+        return res.redirect(e.redirectUrl)
       }
       console.error(e)
       res.send(e.message)
