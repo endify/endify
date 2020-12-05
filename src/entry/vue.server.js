@@ -4,7 +4,10 @@ import {clientConfig} from '../services/ClientConfigService'
 function vueEntryServer(context) {
   return new Promise(async (resolve, reject) => {
     try {
-      const {vueApp, vueConfig: {router, store}, clientConfig} = setupApp()
+      const {vueApp, vueConfig: {router, store}, clientConfig} = setupApp({
+        req: context.req,
+        url: context.url,
+      })
       const {fullPath} = router.resolve(context.path).route
       if (fullPath !== context.path) {
         throw ({redirectUrl: fullPath})

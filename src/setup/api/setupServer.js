@@ -30,9 +30,6 @@ export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
 
     try {
       const url = req.protocol + '://' + req.get('host') + req.originalUrl;
-      console.log('===')
-      console.log('This is url', url)
-      console.log('this is path:', req.url)
       const context = {
         url,
         path: req.url,

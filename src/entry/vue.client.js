@@ -1,5 +1,7 @@
 import {setupApp} from '../setup/vue/setupApp'
-const {vueApp, vueConfig: {router, store}, clientConfig} = setupApp()
+const {vueApp, vueConfig: {router, store}, clientConfig} = setupApp({
+  url: window.location.href
+})
 
 const beforeResolveAction = async (to, from, next) => {
   const finishRequest = (options) => {

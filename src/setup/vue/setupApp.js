@@ -4,7 +4,7 @@ import {setupStore} from './setupStore'
 import {clientConfig} from '../../services/ClientConfigService'
 import VueMeta from 'vue-meta'
 
-export function setupApp() {
+export function setupApp({url, req}) {
   let vueConfig = {
     render: h => h({
       metaInfo: {
@@ -19,7 +19,7 @@ export function setupApp() {
   if(clientConfig.extendVue) {
     vueConfig = {
       ...vueConfig,
-      ...clientConfig.extendVue({vueConfig, Vue})
+      ...clientConfig.extendVue({vueConfig, Vue, url, req})
     }
 
   }
