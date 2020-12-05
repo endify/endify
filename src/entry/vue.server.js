@@ -59,6 +59,7 @@ function vueEntryServer(context) {
         request: context.request,
         url: context.url,
         vueApp,
+        req: context.request,
       }))
 
       try {
