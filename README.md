@@ -35,9 +35,9 @@
  
  ## Features
  It supports a lot of things (out of the box!):
- 
+
  ✔️ Frontend with **Vue.js**
- 
+
  ✔️ Backend in **Node.js**
  
  ✔️ One codebase
@@ -47,7 +47,9 @@
  ✔️ **Vuex** store
  
  ✔️ Code splitting
- 
+
+ ✔️ Great treeshaking (isn't it the same as above?)
+
  ✔️ **Electron** - Yeah, you write once, you get a website and an app for Windows & Mac, so cool!
  
  ✔️ Service container with **awilix**
@@ -68,3 +70,19 @@
  
  ✔️ You install it with one command
 `
+
+
+## Getting started
+
+### Install Endify
+Installing Endify is easy and should take less than a minute. All you have to do is type one of the following commands into your console:
+```bash
+# Recommended for beginners
+$ npx hello-endify 
+
+# Use yarn as default package manager
+$ yarn create endify
+
+# Use npm as default package manager
+$ npm create endify
+```

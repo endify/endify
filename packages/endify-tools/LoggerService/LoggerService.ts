@@ -10,29 +10,29 @@ export class LoggerService implements ILoggerService {
     this.separator = separator
   }
 
-  log(...args) {
+  log(...args): void {
     return console.log(this.prefixString + chalk.gray(this.separator), ...args)
   }
 
-  success(...args) {
+  success(...args): void {
     return console.error(this.prefixString + chalk.green(this.separator), ...args)
   }
 
-  error(...args) {
+  error(...args): void {
     return console.error(this.prefixString + chalk.red(this.separator), ...args)
   }
 
-  warn(...args) {
+  warn(...args): void {
     return console.warn(this.prefixString + chalk.yellow(this.separator), ...args)
   }
 
-  clearLastLine() {
-    process.stdout.moveCursor(0, -1) // up one line
-    process.stdout.clearLine(1) // from cursor to end
+  clearLastLine(): void {
+    process.stdout.moveCursor(0, -1)
+    process.stdout.clearLine(1)
   }
 
-  async logHelloLine() {
-    const time = 1000
+  async logHelloLine(): Promise<void> {
+    const time = 500
     for(let i = 0; i < 30; i++) {
       let string = ''
       for(let j = 0; j < i; j++) {
@@ -45,7 +45,6 @@ export class LoggerService implements ILoggerService {
       if(i > 0) {
         this.clearLastLine()
       }
-      console.log(string)
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(null)

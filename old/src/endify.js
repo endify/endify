@@ -1,4 +1,4 @@
-import CurrentPage from '../../packages/endify-vue/components/CurrentPage.vue'
+import CurrentPage from '../../packages/endify-vue/client/components/CurrentPage.vue'
 
 export {
   CurrentPage,

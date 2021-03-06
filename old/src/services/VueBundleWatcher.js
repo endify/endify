@@ -89,6 +89,7 @@ export class VueBundleWatcher {
   once(...args) {
     return this.eventEmitter.once(...args)
   }
+
   get renderer() {
     return this._renderer
   }

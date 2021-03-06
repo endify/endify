@@ -1,5 +1,5 @@
-import {setupApp} from '../../../old/src/setup/vue/setupApp'
-import {clientConfig} from '../../../old/src/services/ClientConfigService'
+import {setupApp} from '../../../../old/src/setup/vue/setupApp'
+import {clientConfig} from '../../../../old/src/services/ClientConfigService'
 
 function vueEntryServer(context) {
   return new Promise(async (resolve, reject) => {

@@ -1,4 +1,4 @@
-import {LauncherService} from '../../endify-server/LauncherService/LauncherService'
+import {LauncherService} from '../../endify-server/services/LauncherService/LauncherService'
 
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')

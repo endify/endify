@@ -1,4 +1,4 @@
-# endify-electron
+# [WIP] endify-electron
 This package adds Electron based apps support to Endify.
 
 ## Install

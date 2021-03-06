@@ -25,15 +25,23 @@
     "@babel/plugin-proposal-decorators": "^7.13.5",
     "@babel/plugin-proposal-optional-chaining": "^7.13.0",
     "@babel/preset-typescript": "^7.13.0",
-    "@types/node": "^14.14.31",
+    "@types/webpack": "^4.41.26",
+    "@vue/compiler-sfc": "^3.0.7",
+    "@vue/server-renderer": "^3.0.7",
     "babel-loader": "^8.2.2",
     "babel-plugin-parameter-decorator": "^1.0.16",
     "babel-plugin-transform-typescript-metadata": "^0.3.1",
     "chalk": "^4.1.0",
+    "express": "^4.17.1",
     "random-text-faces": "^1.0.9",
+    "sass": "^1.32.8",
     "ts-loader": "^8.0.17",
     "typescript": "^4.2.2",
+    "vue": "^3.0.7",
+    "vue-loader": "^16.1.2",
+    "vue-router": "4",
     "webpack": "^5.24.2",
+    "webpack-merge": "^5.7.3",
     "webpack-node-externals": "^2.5.2",
     "yargs": "^16.2.0"
   },
@@ -42,6 +50,8 @@
     "node": ">=12.0.0"
   },
   "devDependencies": {
+    "@types/node": "^14.14.31",
+    "@types/webpack-env": "^1.16.0",
     "webpack-cli": "^4.5.0"
   }
 }

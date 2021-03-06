@@ -11,8 +11,8 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import {titleMixin} from '../helpers/titleMixin'
-import headMixin from '../../../packages/endify-vue/mixins/headMixin'
+import {titleMixin} from '../../../../old/src/helpers/titleMixin'
+import headMixin from '../mixins/headMixin'
 
 export default {
   title() {

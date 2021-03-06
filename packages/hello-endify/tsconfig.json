@@ -7,9 +7,5 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "baseUrl": "./",
-    "paths": {
-      "@endify": ["/"]
-    }
   }
 }

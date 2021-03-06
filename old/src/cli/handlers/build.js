@@ -23,7 +23,7 @@ const handle = async ({paths, config, argv}) => {
 
   const targetFunctions = {
     api() {
-      return handleWebpackBuild('../../config/webpack/webpack.config.server.js')
+      return handleWebpackBuild('../../config/webpack/webpack.config.server.ts')
     },
     vueClient() {
       return handleWebpackBuild('../../config/webpack/webpack.config.vue.client.js')

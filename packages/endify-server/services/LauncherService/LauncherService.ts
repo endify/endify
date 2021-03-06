@@ -2,11 +2,11 @@ import * as webpack from 'webpack'
 import * as chalk from 'chalk'
 import * as randomTextFaces from 'random-text-faces'
 import {spawn} from 'child_process'
-import {WebpackApiConfig} from '../webpack.config.server'
+import {WebpackConfigServer} from '../../webpack.config.server'
 import {resolve, join} from 'path'
-import {Environments} from '../enum/Environments'
-import {LoggerService} from '../../endify-tools/LoggerService/LoggerService'
-import {ILoggerService} from '../../endify-tools/LoggerService/types/ILoggerService'
+import {Environments} from '../../../endify-tools/enum/Environments'
+import {LoggerService} from '../../../endify-tools/LoggerService/LoggerService'
+import {ILoggerService} from '../../../endify-tools/LoggerService/types/ILoggerService'
 
 export const DEFAULT_PORT = 3000
 
@@ -25,7 +25,7 @@ export class LauncherService {
   }
 
   setupCompiler() {
-    const webpackApiConfig = new WebpackApiConfig({
+    const webpackApiConfig = new WebpackConfigServer({
       env: Environments.DEVELOPMENT,
       webpackPollInterval: 500,
       issuerPath: this.issuerPath,
@@ -33,14 +33,15 @@ export class LauncherService {
       apiEntryPath: resolve(__dirname, '../../endify-server')
     })
     this.loggerService.log('Building API...')
-    return new Promise((resolve, reject) => {
-      this.compiler = webpack(webpackApiConfig.getConfig(), (error, stats) => {
+    return new Promise(async (resolve, reject) => {
+      console.log(await webpackApiConfig.getConfig())
+      this.compiler = webpack(await webpackApiConfig.getConfig(), (error, stats) => {
         if(error) {
-          this.loggerService.error(`Error in ${((stats.endTime - stats.startTime))}ms.`, error, stats)
+          this.loggerService.error(`Error in ${((stats.endTime - stats.startTime))}ms.`, error)
           return reject(error)
         }
         // console.log('wtf', stats)
-        this.loggerService.success(`Ready in ${((stats.endTime - stats.startTime))}ms.`, stats)
+        this.loggerService.success(`Ready in ${((stats.endTime - stats.startTime))}ms.`)
         resolve(stats)
       })
     })
@@ -54,7 +55,7 @@ export class LauncherService {
     const stats = await this.setupCompiler()
     const apiProcess = spawn('node', [
       // '--inspect=9229',
-      join(this.issuerPath, '/build/api/server.js')
+      join(this.issuerPath, '/.endify/build/server/server.js')
     ], {
       stdio: ['pipe', 'inherit', 'inherit']
     })

@@ -27,11 +27,11 @@ const start = async function() {
     defaults: path.join(__ENDIFY_ENV__.BASE_PATH, '/.env.defaults'),
     path: path.join(__ENDIFY_ENV__.BASE_PATH, '/.env')
   });
-
+  __ENDIFY_ENV__
   let clientWebpackConfig, serverWebpackConfig
   if(__ENDIFY_ENV__.ENV !== 'production') {
-    clientWebpackConfig = require('../../../packages/endify-vue/webpack.config.vue.client.js')
-    serverWebpackConfig = require('../../../packages/endify-vue/webpack.config.vue.server.js')
+    clientWebpackConfig = require('../../../packages/endify-vue/.old/webpack.config.vue.client.js')
+    serverWebpackConfig = require('../../../packages/endify-vue/.old/webpack.config.vue.server.js')
   }
 
   // Watch for bundle or load it on production
