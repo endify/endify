@@ -1,0 +1,1 @@
+This extension mixes client & server logs into browser console, so you actually know what is happening.

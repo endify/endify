@@ -5,26 +5,20 @@ import {ConfigService} from '../endify-tools/ConfigService/ConfigService'
 import config from '@app/config'
 import {endifyVueMiddleware} from '@endify/vue/server'
 import {ServerHookTypes} from '../endify-tools/HookService/types/ServerHookTypes'
+import configExtension from '@endify/config-extension'
 
 // TODO: Modify webpack hot logs to match endify style
 // import webpackHotLog from '@endify/node_modules/webpack/hot/log'
 // webpackHotLog.setLogLevel(null)
 
 // TODO: Add inversify container to handle these
-const hooks: Record<ServerHookTypes, unknown> = {
-
-}
-
-const b = ServerHookTypes.Log as ServerHookTypes
-
+// const hooks: Record<ServerHookTypes, unknown> = {
+//  [ServerHookTypes.Log]: loggerService
+// }
 const loggerService = new LoggerService('Endify', ' |')
 const configService = new ConfigService()
 const serverService = new ServerService(loggerService, appFactory)
 
-loggerService.hooks.log.tap('test', (args) => {
-  console.log('taki mamy length argsow', args.length)
-  return true
-})
 async function appFactory() {
   const app = express()
   app.use('/', await endifyVueMiddleware(configService.config.vue))
@@ -32,6 +26,9 @@ async function appFactory() {
 }
 
 async function setup() {
+  const extensions = [
+    [configExtension],
+  ]
   await configService.loadConfig(config)
   await serverService.setPort(configService.config.port)
   await serverService.setupServer()

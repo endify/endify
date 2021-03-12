@@ -7,7 +7,8 @@
 </p>
 
 <h1 align="center">Endify</h1>
-<p align="center">JS Framework connecting backend, frontend and native JavaScript based apps</p>
+<p align="center">
+Endify is a JavaScript framework aimed at connecting frontend and backend code into one codebase, which opens new possibilities to the world of code.</p>
 
 -------
  ## Motivation

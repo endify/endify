@@ -1,0 +1,1 @@
+Basic extension that enables Endify configuration through .config files.
