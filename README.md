@@ -1,40 +1,15 @@
 ![Endify logo](docs/media/header.jpg)
-
-<h1 align="center">
- Endify (Work in progress)
-</h1>
 <p align="center">
-JS Framework connecting backend, frontend and native JavaScript based apps
+ <img alt="Downloads" src="https://img.shields.io/npm/dy/endify?color=%23ff451a">
+ <img alt="npm" src="https://img.shields.io/npm/v/endify?color=%23ff451a">
+ <img alt="MIT license" src="https://img.shields.io/npm/l/endify?color=%23ff451a">
+ <img alt="docs" src="https://img.shields.io/badge/docs-endify.org-ff451a">
 </p>
 
+<h1 align="center">Endify</h1>
+<p align="center">JS Framework connecting backend, frontend and native JavaScript based apps</p>
 
- ## Install
- You can get a fresh Endify project with one simple command:
- ```coffee
- npx create-endify-app
- ```
- 
- Check the guide if you want to setup it on your own.
- 
- Guide:
- 
- ```coffee
- npm i endify
- ```
- or
- ```coffee
- yarn add endify
- ```
- 
- Then create `endify.config.client` in the root dir of your project 
- 
- Then fill it with configuration:
- ```javascript
- export default {
-   // Configuration
- }
- ```
- 
+-------
  ## Motivation
  I was working with Vue Storefront and Nuxt for a while, but their biggest mistake was that it's not everything to make the website work. Of course you need an API in another project, some workers, services and so on... So I realized that why not to connect them both? And here it is - Endify.
  
@@ -68,8 +43,6 @@ JS Framework connecting backend, frontend and native JavaScript based apps
  ✔️ It has some **Github Actions** examples of Testing & Building
  
  ✔️ And even it has some great tutorial on how to apply image to **kubernetes** with Github Actions!
- 
- ✔️ You install it with one command
 `
 
 
