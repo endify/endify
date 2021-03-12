@@ -1,8 +1,13 @@
-![Endify logo](https://github.com/endify/endify/blob/master/endify-header.png)
- 
- # Endify (Work in progress)
-  JS Framework connecting backend, frontend and native JavaScript based apps
- 
+![Endify logo](docs/media/header.jpg)
+
+<h1 align="center">
+ Endify (Work in progress)
+</h1>
+<p align="center">
+JS Framework connecting backend, frontend and native JavaScript based apps
+</p>
+
+
  ## Install
  You can get a fresh Endify project with one simple command:
  ```coffee
@@ -52,17 +57,13 @@
 
  ✔️ **Electron** - Yeah, you write once, you get a website and an app for Windows & Mac, so cool!
  
- ✔️ Service container with **awilix**
- 
  ✔️ **SSR** (Server side rendering)
  
  ✔️ **Hot reload of frontend and backend** (woah! I worked a few weeks on that)
  
  ✔️ It's fully **dockerized**
- 
- ✔️ It allows to test itself with **jest**
- 
- ✔️ It includes **`pnpm`** instead of `npm` for the fastest installing experience
+
+ ✔️ You manually choose between npm, yarn or pnpm
  
  ✔️ It has some **Github Actions** examples of Testing & Building
  
@@ -80,9 +81,9 @@ Installing Endify is easy and should take less than a minute. All you have to do
 # Recommended for beginners
 $ npx hello-endify 
 
-# Use yarn as default package manager
+# Install with yarn create
 $ yarn create endify
 
-# Use npm as default package manager
+# Install with npm
 $ npm create endify
 ```

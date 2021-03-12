@@ -24,7 +24,8 @@ export class WebpackConfigBase {
       watch: this.env === Environments.DEVELOPMENT,
       resolve: {
         alias: {
-          '@app/config': join(this.issuerPath, 'test.ts'),
+          '@app/config-vue': join(this.issuerPath, 'testconfig.Endify.vue'),
+          '@app/config': join(this.issuerPath, 'config'),
           '@app': this.issuerPath,
           '@endify/vue': join(this.installedModulePath, 'packages/endify-vue'),
           '@endify': this.installedModulePath,
@@ -70,9 +71,15 @@ export class WebpackConfigBase {
       },
       externals: [
         nodeExternals({
-          target: 'node',
-          importType: 'commonjs2',
-          modulesDir: join(this.issuerPath, 'node_modules'),
+          importType: (moduleName: string) => {
+            try {
+              require.resolve(moduleName)
+              return `commonjs ${moduleName}`
+            } catch(e) {
+              return `commonjs2 ${join(this.installedModulePath, 'node_modules', moduleName)}`
+            }
+          },
+          modulesDir: join(this.installedModulePath, 'node_modules'),
         }),
         {
           // fs: 'commonjs2 fs',
@@ -97,7 +104,8 @@ export class WebpackConfigBase {
         //   ]
         // })
         {
-          // 'chalk': `commonjs ${join(this.installedModulePath, 'node_modules', 'chalk')}`.
+          // 'chalk': `commonjs ${join(this.installedModulePath, 'node_modules', 'chalk')}`,
+          // 'webpack': `commonjs ${join(this.installedModulePath, 'node_modules', 'webpack')}`
           // 'chalk': 'commonjs2 chalk'
         }
       ],

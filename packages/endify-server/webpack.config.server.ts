@@ -30,6 +30,9 @@ export class WebpackConfigServer extends WebpackConfigBase {
         path: join(this.buildPath, 'server'),
         libraryTarget: 'commonjs2',
       },
+      resolve: {
+        extensions: ['.endify.server.ts', '.endify.server.js'],
+      },
       node: {
         __dirname: true
       },

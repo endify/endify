@@ -1,29 +1,44 @@
 import * as chalk from 'chalk'
 import {ILoggerService} from './types/ILoggerService'
+import {SyncHook} from 'tapable'
+import {ILoggerServiceHooks} from './types/ILoggerServiceHooks'
+import {LogLevels} from './types/LogLevels'
 
 export class LoggerService implements ILoggerService {
   private readonly separator: string
   private readonly prefix: string
+  public hooks: ILoggerServiceHooks
 
   constructor(prefix: string, separator: string) {
     this.prefix = prefix
     this.separator = separator
+    this.hooks = {
+      log: new SyncHook(['logLevel', 'args'])
+    }
   }
 
   log(...args): void {
-    return console.log(this.prefixString + chalk.gray(this.separator), ...args)
+    return this.callLog(LogLevels.log, [this.prefixString + chalk.gray(this.separator), ...args])
   }
 
   success(...args): void {
-    return console.error(this.prefixString + chalk.green(this.separator), ...args)
+    return this.callLog(LogLevels.log, [this.prefixString + chalk.green(this.separator), ...args])
   }
 
   error(...args): void {
-    return console.error(this.prefixString + chalk.red(this.separator), ...args)
+    return this.callLog(LogLevels.error, [this.prefixString + chalk.red(this.separator), ...args])
   }
 
   warn(...args): void {
-    return console.warn(this.prefixString + chalk.yellow(this.separator), ...args)
+    return this.callLog(LogLevels.warn, [this.prefixString + chalk.yellow(this.separator), ...args])
+  }
+
+  private callLog(logLevel: LogLevels, args) {
+    const wtf = this.hooks.log.call(logLevel, args)
+    if(wtf === false) {
+      return
+    }
+    return console[logLevel](...args)
   }
 
   clearLastLine(): void {

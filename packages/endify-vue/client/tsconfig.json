@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "lib": ["es2020", "dom"],
+    "types": ["node"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "baseUrl": "./",
+    "paths": {
+      "@endify": ["/"]
+    },
+    "target": "esnext",
+    "module": "esnext",
+    // this enables stricter inference for data properties on `this`
+    "strict": true,
+    "jsx": "preserve",
+    "moduleResolution": "node"
+  }
+}

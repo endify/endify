@@ -1,8 +1,9 @@
 import {LoggerService} from '../../../endify-tools/LoggerService/LoggerService'
-// import {VueBundleService} from '../services/VueBundleService/VueBundleService'
+import {VueBundleService} from '../services/VueBundleService/VueBundleService'
 // import {EndifyVueMiddleware} from '../middleware/EndifyVueMiddleware'
 import {WebpackConfigVueServer} from '../../client/webpack.config.vue.server'
 import {Environments} from '../../../endify-tools/enum/Environments'
+import {join} from 'path'
 
 import * as webpack from 'webpack'
 
@@ -16,37 +17,37 @@ export async function setupMiddleware(config) {
     installedModulePath: $endify.installedModulePath
   })
 
-
-  console.log(await vueServerWebpackConfig.getConfig())
-
-  // await new Promise(async (resolve, reject) => {
-  //   const compiler = webpack(await vueServerWebpackConfig.getConfig(), (error, stats) => {
-  //     if(error) {
-  //       this.loggerService.error(`Vue server compiler error in ${((stats.endTime - stats.startTime))}ms.`, error)
-  //       return reject(error)
-  //     }
-  //     // console.log('wtf', stats)
-  //     this.loggerService.success(`Vue server bundle compiled in ${((stats.endTime - stats.startTime))}ms.`)
-  //     resolve(stats)
-  //   })
-  // })
-  await new Promise(async (resolve, reject) => {
-    const compiler = webpack(await vueServerWebpackConfig.getConfig(), (error, stats) => {
+  const vueServerWebpackConfigObject = await vueServerWebpackConfig.getConfig()
+  let setupApp
+  const res = await new Promise(async (resolve, reject) => {
+    const compiler = webpack(vueServerWebpackConfigObject, (error, stats) => {
+      console.log('done!', error, stats)
       if(error) {
-        this.loggerService.error(`Vue server compiler error in ${((stats.endTime - stats.startTime))}ms.`, error)
+        loggerService.error(`Vue server compiler error`, error)
         return reject(error)
       }
-      // console.log('wtf', stats)
-      this.loggerService.success(`Vue server bundle compiled in ${((stats.endTime - stats.startTime))}ms.`)
+      loggerService.success(`Vue server bundle compiled in ${((stats.endTime - stats.startTime))}ms.`)
+      setupApp = __non_webpack_require__(join(vueServerWebpackConfigObject.output.path, 'index.js')).default
+      // console.log(setupApp)
       resolve(stats)
     })
+    console.log('ok')
   })
 
+  const vueBundleService = new VueBundleService() // classesThatWillEmitSomethingLike: BundleHasBeenUpdated/Createdforthefirsttime
 
-  return (req, res) => {
-    res.send(':)')
+  return async (req, res) => {
+    if(setupApp) {
+      const appHtml = await vueBundleService.renderAppToString(await setupApp({req}), req)
+      res.send(appHtml)
+      // compiledAppStream.on('end', () => res.end());
+      // compiledAppStream.pipe(res);
+      // console.log('compiledAppStream', compiledAppStream)
+      // compiledAppStream.pipe(res)
+    } else {
+      res.send(':(')
+    }
   }
-  // const vueBundleService = new VueBundleService() // classesThatWillEmitSomethingLike: BundleHasBeenUpdated/Createdforthefirsttime
   // const vueMiddleware = new EndifyVueMiddleware(loggerService, vueBundleService)
 
   // // const

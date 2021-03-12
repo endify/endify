@@ -1,6 +1,5 @@
 import {Request} from 'express'
-import {renderToStream, SSRContext} from '@vue/server-renderer'
-import {Readable} from 'stream'
+import {renderToString, SSRContext} from '@vue/server-renderer'
 import {App} from 'vue';
 import {IVueBundleService} from './types/IVueBundleService'
 
@@ -15,9 +14,9 @@ export class VueBundleService implements IVueBundleService {
 
   }
 
-  renderAppToStream(req: Request): Readable {
+  async renderAppToString(app, req: Request): Promise<string> {
     const context = this.getContextFromRequest(req)
-    return renderToStream(this.app, context)
+    return await renderToString(app, context)
   }
 
   private getContextFromRequest(req: Request): SSRContext {

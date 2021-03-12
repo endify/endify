@@ -32,16 +32,14 @@ export class LauncherService {
       installedModulePath: this.installedModulePath,
       apiEntryPath: resolve(__dirname, '../../endify-server')
     })
-    this.loggerService.log('Building API...')
+    this.loggerService.log('Bundling Endify Server...')
     return new Promise(async (resolve, reject) => {
-      console.log(await webpackApiConfig.getConfig())
       this.compiler = webpack(await webpackApiConfig.getConfig(), (error, stats) => {
         if(error) {
-          this.loggerService.error(`Error in ${((stats.endTime - stats.startTime))}ms.`, error)
+          this.loggerService.error(`Failed to build Endify Server in ${((stats.endTime - stats.startTime))}ms.`, error)
           return reject(error)
         }
-        // console.log('wtf', stats)
-        this.loggerService.success(`Ready in ${((stats.endTime - stats.startTime))}ms.`)
+        this.loggerService.success(`Endify Server built in ${((stats.endTime - stats.startTime))}ms.`)
         resolve(stats)
       })
     })

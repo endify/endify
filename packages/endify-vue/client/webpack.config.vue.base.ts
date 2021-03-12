@@ -1,4 +1,4 @@
-// import {VueLoaderPlugin} from 'vue-loader'
+import {VueLoaderPlugin} from 'vue-loader'
 import {WebpackConfigBase} from '../../endify-tools/webpack.config.base'
 
 export class WebpackConfigVueBase extends WebpackConfigBase {
@@ -51,17 +51,25 @@ export class WebpackConfigVueBase extends WebpackConfigBase {
           //     },
           //   ],
           // },
-          // {
-          //   test: /\.vue$/,
-          //   loader: 'vue-loader'
-          // },
+          {
+            test: /\.tsx?$/,
+            loader: 'ts-loader',
+            options: {
+              appendTsSuffixTo: [/\.vue$/],
+            },
+            exclude: /node_modules/,
+          },
+          {
+            test: /\.vue$/,
+            loader: 'vue-loader'
+          },
         ]
       },
-      // plugins: [
-      //   new VueLoaderPlugin(),
-      // ],
+      plugins: [
+        new VueLoaderPlugin(),
+      ],
       resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.vue', '.json'],
+        extensions: ['.endify.client.ts', '.endify.client.js', '.ts', '.tsx', '.js', '.vue', '.json'],
       },
     }
 

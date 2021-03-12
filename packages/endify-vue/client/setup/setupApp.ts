@@ -1,6 +1,7 @@
-import { createApp, h } from 'vue'
+import { h } from 'vue'
 
-export function setupApp() {
+export function setupApp(createApp) {
+    // console.log('here we  are', ...args)
     const NotFoundComponent = { template: '<p>Page not found</p>' }
     const HomeComponent = { template: '<p>Home page</p>' }
     const AboutComponent = { template: '<p>About page</p>' }
@@ -10,7 +11,7 @@ export function setupApp() {
     }
     const SimpleRouter = {
         data: () => ({
-            currentRoute: window.location.pathname
+            currentRoute: '/'
         }),
         computed: {
             CurrentComponent() {
