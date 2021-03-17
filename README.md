@@ -46,6 +46,17 @@ Endify is a JavaScript framework aimed at connecting frontend and backend code i
  ✔️ And even it has some great tutorial on how to apply image to **kubernetes** with Github Actions!
 `
 
+|                               | Endify       | Nuxt.js                  |   |
+|--------------------------------|--------------|--------------------------|---|
+| Frontend hot reload            | ✅ Yes        | ✅ Yes                    |   |
+| Backend hot reload             | ✅ Yes        | ❌ No                     |   |
+| Proper 404/500 errors handling | ✅ Yes        | ❌ No                     |   |
+| asdasd                         | ✅ Yes        | ❌ No                     |   |
+| Initial bundle time            | ⚡ 0.24s      | 4.02s                    |   |
+| Average hot reload time        | ⚡ 0.04s      | 1.02s                    |   |
+| Plugins                        | Full support | Only client side support |   |
+| Release date                   | 23 jun 2020  | 19 dec 2018              |   |
+
 
 ## Getting started
 
