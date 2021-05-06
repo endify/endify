@@ -55,7 +55,7 @@ function vueEntryServer(context) {
         clientConfig.mainComponent,
         ...matchedComponents
       ]
-      const asyncPromises = matchedComponents.map(({ asyncData }) => asyncData && asyncData({
+      const asyncPromises = componentstoCallAsyncData.map(({ asyncData }) => asyncData && asyncData({
         store,
         route: router.currentRoute,
         redirect,
