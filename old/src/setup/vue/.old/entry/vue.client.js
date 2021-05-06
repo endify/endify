@@ -1,4 +1,4 @@
-import {setupApp} from '../../../../old/src/setup/vue/setupApp'
+import {setupApp} from '../../setupApp'
 const {vueApp, vueConfig: {router, store}, clientConfig} = setupApp({
   url: window.location.href
 })

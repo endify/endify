@@ -4,12 +4,15 @@ import {VueBundleService} from '../services/VueBundleService/VueBundleService'
 import {WebpackConfigVueServer} from '../../client/webpack.config.vue.server'
 import {Environments} from '../../../endify-tools/enum/Environments'
 import {join} from 'path'
-
 import * as webpack from 'webpack'
+import {readFile} from 'fs'
+import {VueServerBundler} from '../services/VueBundleService/bundlers/VueServerBundler'
+
 
 export async function setupMiddleware(config) {
   const loggerService = new LoggerService('Endify', ' |')
   // Here we will add classes to update dependencies
+
   loggerService.log('Setting up Vue...')
   const vueServerWebpackConfig = new WebpackConfigVueServer({
     env: Environments.DEVELOPMENT,
@@ -18,35 +21,31 @@ export async function setupMiddleware(config) {
   })
 
   const vueServerWebpackConfigObject = await vueServerWebpackConfig.getConfig()
-  let setupApp
-  const res = await new Promise(async (resolve, reject) => {
-    const compiler = webpack(vueServerWebpackConfigObject, (error, stats) => {
-      console.log('done!', error, stats)
-      if(error) {
-        loggerService.error(`Vue server compiler error`, error)
-        return reject(error)
-      }
-      loggerService.success(`Vue server bundle compiled in ${((stats.endTime - stats.startTime))}ms.`)
-      setupApp = __non_webpack_require__(join(vueServerWebpackConfigObject.output.path, 'index.js')).default
-      // console.log(setupApp)
-      resolve(stats)
-    })
-    console.log('ok')
-  })
 
-  const vueBundleService = new VueBundleService() // classesThatWillEmitSomethingLike: BundleHasBeenUpdated/Createdforthefirsttime
+  const vueServerBundler = new VueServerBundler(
+    loggerService,
+    vueServerWebpackConfigObject
+  )
+
+  const vueBundleService = new VueBundleService(vueServerBundler) // classesThatWillEmitSomethingLike: BundleHasBeenUpdated/Createdforthefirsttime
+  if(true) {
+    vueBundleService.watch().then()
+  } // if dev
 
   return async (req, res) => {
-    if(setupApp) {
-      const appHtml = await vueBundleService.renderAppToString(await setupApp({req}), req)
-      res.send(appHtml)
-      // compiledAppStream.on('end', () => res.end());
-      // compiledAppStream.pipe(res);
-      // console.log('compiledAppStream', compiledAppStream)
-      // compiledAppStream.pipe(res)
-    } else {
-      res.send(':(')
+    if(!vueServerBundler.isReady) {
+      const loadingHtml = await new Promise((resolve, reject) => {
+        readFile(join($endify.installedModulePath, 'packages/endify-vue/server/templates/endify-loading.html'), 'utf8', (err, data) => {
+          if(err) {
+            return reject(err)
+          }
+          resolve(data)
+        })
+      })
+      return res.send(loadingHtml)
     }
+    const appHtml = await vueBundleService.renderAppToString(req)
+    res.send(appHtml)
   }
   // const vueMiddleware = new EndifyVueMiddleware(loggerService, vueBundleService)
 

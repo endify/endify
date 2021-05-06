@@ -10,7 +10,7 @@ When dealing with frontend & backend code in one codebase (thanks to Endify), ev
 ###Let's imagine the following scenario:
 - We have `plugin.js` file containing some basic logic, for example:
 ```javascript
-// client.js
+// plugin.js
 import someMiddleware from './some-middleware.js'
 import someVueComponent from './some-vue-component.vue'
 
@@ -66,3 +66,16 @@ Please create a new issue or ask us on our @discord server
 ## Credits
 - pieczorx on inventing this
 - evan you for inventing .vue
+
+## Todos
+- Write it in more elegant way
+- Show an example of skipping this feature
+```html
+<script id="server">
+  export * from './server.js'
+</script>
+
+<script id="client">
+  export * from './client.js'
+</script>
+```

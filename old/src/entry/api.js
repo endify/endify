@@ -30,8 +30,8 @@ const start = async function() {
   __ENDIFY_ENV__
   let clientWebpackConfig, serverWebpackConfig
   if(__ENDIFY_ENV__.ENV !== 'production') {
-    clientWebpackConfig = require('../../../packages/endify-vue/.old/webpack.config.vue.client.js')
-    serverWebpackConfig = require('../../../packages/endify-vue/.old/webpack.config.vue.server.js')
+    clientWebpackConfig = require('../setup/vue/.old/webpack.config.vue.client.js')
+    serverWebpackConfig = require('../setup/vue/.old/webpack.config.vue.server.js')
   }
 
   // Watch for bundle or load it on production

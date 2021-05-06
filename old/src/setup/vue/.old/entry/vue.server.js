@@ -1,5 +1,5 @@
-import {setupApp} from '../../../../old/src/setup/vue/setupApp'
-import {clientConfig} from '../../../../old/src/services/ClientConfigService'
+import {setupApp} from '../../setupApp'
+import {clientConfig} from '../../../../services/ClientConfigService'
 
 function vueEntryServer(context) {
   return new Promise(async (resolve, reject) => {
@@ -55,7 +55,7 @@ function vueEntryServer(context) {
         clientConfig.mainComponent,
         ...matchedComponents
       ]
-      const asyncPromises = matchedComponents.map(({ asyncData }) => asyncData && asyncData({
+      const asyncPromises = componentstoCallAsyncData.map(({ asyncData }) => asyncData && asyncData({
         store,
         route: router.currentRoute,
         redirect,

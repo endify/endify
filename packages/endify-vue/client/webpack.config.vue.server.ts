@@ -18,6 +18,7 @@ export class WebpackConfigVueServer extends WebpackConfigVueBase {
         filename: 'index.js',
         publicPath: '/public/',
         path: join(this.buildPath, 'vue-server'),
+        libraryTarget: 'umd',
       },
     }
     return this.mergeConfig(await super.getConfig(), config)

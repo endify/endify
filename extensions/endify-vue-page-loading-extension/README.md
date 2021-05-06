@@ -2,4 +2,4 @@
 Really simple progressbar
 
 ## Requirements:
-- [@endify/async-data-extension](../endify-async-data-extension)
+- [@endify/async-data-extension](../../packages/endify-async-data-extension)

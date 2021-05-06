@@ -24,10 +24,10 @@ export class WebpackConfigBase {
       watch: this.env === Environments.DEVELOPMENT,
       resolve: {
         alias: {
-          '@app/config-vue': join(this.issuerPath, 'testconfig.Endify.vue'),
           '@app/config': join(this.issuerPath, 'config'),
           '@app': this.issuerPath,
           '@endify/vue': join(this.installedModulePath, 'packages/endify-vue'),
+          '@endify/config-extension': join(this.installedModulePath, 'packages/endify-config-extension'),
           '@endify': this.installedModulePath,
           // Can be problematic if installed directly to node_modules on the same level, should detect it in the future
           // 'webpack/hot/log': join(this.installedModulePath, 'packages/endify-tools/WebpackHotLog/WebpackHotLog'),

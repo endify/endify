@@ -14,6 +14,20 @@ Endify is a JavaScript framework aimed at connecting frontend and backend code i
  ## Motivation
  I was working with Vue Storefront and Nuxt for a while, but their biggest mistake was that it's not everything to make the website work. Of course you need an API in another project, some workers, services and so on... So I realized that why not to connect them both? And here it is - Endify.
  
+## Status
+Package | Status | Description
+--- | --- | ---
+@endify/cli | 1.0.0-alpha.1 👽 | Command line tool that runs @endify/server along with @endify/electron
+@endify/server | in progress | Runs backend code & serves client bundles
+@endify/vue | in progress | Default client setup (and the only one for now)
+@endify/electron | <span style="color:#ff461a">n/a</span> | Adds native app support
+@endify/extensions | <span style="color:#ff461a">n/a</span> | Allows Endify to be extended with extensions
+@endify/static | <span style="color:#ff461a">n/a</span> | Adds /static folder support
+@endify/vue-script-loader | <span style="color:#ff461a">n/a</span> | Load `.endify.vue` files
+create-endify-app | <span style="color:#ff461a">n/a</span> | Init simple endify app
+@endify/hello-template | <span style="color:#ff461a">n/a</span> | Template which is being used by create-endify-app
+
+
  ## Features
  It supports a lot of things (out of the box!):
 

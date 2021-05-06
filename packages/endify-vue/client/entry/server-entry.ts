@@ -1,27 +1,26 @@
-import { createSSRApp } from 'vue'
+import {createSSRApp} from 'vue'
 import {createMemoryHistory, createRouter} from 'vue-router'
 import {IServerEntryContext} from './enum/IServerEntryContext'
-import MainComponent from '../components/MainComponent'
 import {setupRoutes} from '../setup/setupRoutes'
 import {ConfigService} from '../../../endify-tools/ConfigService/ConfigService'
 import config from '@app/config'
+import {setupStore} from '../setup/setupStore'
+import {setupRouter} from '../setup/setupRouter'
 
 const configService = new ConfigService()
 
-import testConfig from '@app/config-vue'
-
-
 export default async function(context: IServerEntryContext) {
-  console.log('mamy config', testConfig)
   await configService.loadConfig(config) // TODO: Move this function, it can't be loaded each request
-  let history = createMemoryHistory()
-  let router = createRouter({
-    routes: await setupRoutes(),
-    history
+  const app = createSSRApp(configService.config.mainComponent) // TODO: Add default main component
+  await setupRouter({
+    app,
+    url: context.req.url,
+    history: createMemoryHistory(),
+    routes:  await setupRoutes({
+      config: configService.config
+    })
   })
-  await router.push(context.req.url)
-  await router.isReady()
-  const app = createSSRApp(MainComponent)
-  app.use(router)
+  setupStore({app})
   return app
 }
+

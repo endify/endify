@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <router-view class="view" v-if="!error"></router-view>
-    <div>
-      <ErrorPage v-if="error"/>
-    </div>
-  </div>
+  <RouterView class="endify-view" v-if="!error"/>
+  <ErrorPage v-else/>
 </template>
 
 <script>
