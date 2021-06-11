@@ -1,6 +1,6 @@
 {
   "name": "endify",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Vue.js on front, Node.js behind, Electron ready, Mobile soon - All in one codebase",
   "main": "src/endify.js",
   "scripts": {
@@ -15,9 +15,7 @@
   "bugs": {
     "url": "https://github.com/endify/endify/issues"
   },
-  "bin": {
-    "endify": "src/cli/index.js"
-  },
+  "bin": "src/cli/index.js",
   "babel": {
     "env": {
       "test": {
