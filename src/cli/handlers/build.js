@@ -16,6 +16,7 @@ const handle = async ({paths, config, argv}) => {
         if (e || (stats.errors && stats.errors.length)) {
           return reject(e || stats.errors)
         }
+        console.log('stats', stats)
         resolve(stats)
       })
     })
