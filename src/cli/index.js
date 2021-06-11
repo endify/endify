@@ -50,8 +50,6 @@ const getCommandHandler = () => {
   return DEFAULT_FUNCTION
 }
 
-
 const cmdHandler = getCommandHandler()
 
 cmdHandler()
-
