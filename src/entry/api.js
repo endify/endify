@@ -69,6 +69,9 @@ const start = async function() {
     console.error(e)
   }
   server = http.createServer(expressApp || undefined)
+  if(typeof endifyServerConfig.extendServer === 'function') {
+    endifyServerConfig.extendServer(server)
+  }
   const PORT = endifyServerConfig.port || __ENDIFY_ENV__.PORT || 3000
   server.listen(PORT, () => {
     console.log('Server is listening on port', PORT)
