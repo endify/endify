@@ -4,9 +4,9 @@ import * as randomTextFaces from 'random-text-faces'
 import {spawn} from 'child_process'
 import {WebpackConfigServer} from '../../webpack.config.server'
 import {resolve, join} from 'path'
-import {Environments} from '../../../endify-tools/enum/Environments'
-import {LoggerService} from '../../../endify-tools/LoggerService/LoggerService'
-import {ILoggerService} from '../../../endify-tools/LoggerService/types/ILoggerService'
+import {Environment} from '../../../endify-core/enum/Environment'
+import {LoggerService} from '../../../endify-core/src/services/LoggerService/LoggerService'
+import {ILoggerService} from '../../../endify-core/src/services/LoggerService/types/ILoggerService'
 
 export const DEFAULT_PORT = 3000
 
@@ -26,11 +26,11 @@ export class LauncherService {
 
   setupCompiler() {
     const webpackApiConfig = new WebpackConfigServer({
-      env: Environments.DEVELOPMENT,
+      env: Environment.DEVELOPMENT,
       webpackPollInterval: 500,
       issuerPath: this.issuerPath,
       installedModulePath: this.installedModulePath,
-      apiEntryPath: resolve(__dirname, '../../endify-server')
+      apiEntryPath: resolve(__dirname, '../../endify-server'),
     })
     this.loggerService.log('Bundling Endify Server...')
     return new Promise(async (resolve, reject) => {
@@ -53,13 +53,13 @@ export class LauncherService {
     const stats = await this.setupCompiler()
     const apiProcess = spawn('node', [
       // '--inspect=9229',
-      join(this.issuerPath, '/.endify/build/server/server.js')
+      join(this.issuerPath, '/.endify/build/server/server.js'),
     ], {
-      stdio: ['pipe', 'inherit', 'inherit']
+      stdio: ['pipe', 'inherit', 'inherit'],
     })
     apiProcess.on('close', (code) => {
       this.loggerService.log(`Spawned server process shut down with ${code} code.`)
-    });
+    })
     // let done = false
     // this.compiler.watch({}, (e, stats) => {
     //
@@ -71,18 +71,18 @@ export class LauncherService {
     //     return
     //   }
     //   done = true
-      // const electronProcess = spawn(electron, [join(this.installedModulePath, '/src/entry/electron.js')], {
-        //   stdio: ['pipe', 'inherit', 'inherit'],
-        //   windowsHide: false,
-        //   env: process.env,
-        //   cwd: this.installedModulePath
-        // })
+    // const electronProcess = spawn(electron, [join(this.installedModulePath, '/src/entry/electron.js')], {
+    //   stdio: ['pipe', 'inherit', 'inherit'],
+    //   windowsHide: false,
+    //   env: process.env,
+    //   cwd: this.installedModulePath
+    // })
 
 
-      // electronProcess.on('close', (code) => {
-      //   console.log(`Electron process shut down with code ${code}`);
-      // });
-      // console.log('Successfully started an app.')
+    // electronProcess.on('close', (code) => {
+    //   console.log(`Electron process shut down with code ${code}`);
+    // });
+    // console.log('Successfully started an app.')
     // })
   }
 }

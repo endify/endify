@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const builder = require("electron-builder")
+const builder = require('electron-builder')
 const Platform = builder.Platform
 
 const handle = async ({paths, config, argv}) => {
@@ -36,7 +36,8 @@ const handle = async ({paths, config, argv}) => {
     },
     async electron(targets) {
       const electronEntryPath = path.join(paths.basePath, './src/entry/electron.js')
-      const electronBuilderConfig = config.electronBuilderConfig || {}
+      const electronBuilderConfig = config.electronBuilderConfig || {
+      }
       return await builder.build({
         targets,
         config: {
@@ -44,36 +45,37 @@ const handle = async ({paths, config, argv}) => {
           directories: {
             output: path.join(paths.issuerPath, '/dist/native'),
             app: paths.issuerPath,
-            buildResources: path.join(paths.issuerPath, 'src/build')
+            buildResources: path.join(paths.issuerPath, 'src/build'),
           },
           extraMetadata: {
-            ...(electronBuilderConfig.extraMetadata || {}),
+            ...(electronBuilderConfig.extraMetadata || {
+            }),
             main: './endify/entry/electron.js',
           },
           files: [
             '!*/**',
-            './package.json',
+            './launcher.json',
             {
-              "from": path.resolve(electronEntryPath, '../'),
-              "to": "endify/entry",
-              "filter": ["electron.js"]
+              'from': path.resolve(electronEntryPath, '../'),
+              'to': 'endify/entry',
+              'filter': ['electron.js'],
             },
             {
-              "from": path.join(paths.issuerPath, 'dist/client-native'),
-              "to": "dist/client-native",
-              "filter": ["**/*"]
+              'from': path.join(paths.issuerPath, 'dist/client-native'),
+              'to': 'dist/client-native',
+              'filter': ['**/*'],
             },
             {
-              "from": path.join(paths.issuerPath, 'node_modules'),
-              "to": "node_modules",
-              "filter": ["**/*", '!./endify/**']
-            }
+              'from': path.join(paths.issuerPath, 'node_modules'),
+              'to': 'node_modules',
+              'filter': ['**/*', '!./endify/**'],
+            },
           ],
           extends: null,
         },
-        publish: 'always'
+        publish: 'always',
       })
-    }
+    },
   }
 
   const argvMap = {
@@ -83,7 +85,7 @@ const handle = async ({paths, config, argv}) => {
     async 'client'() {
       await Promise.all([
         targetFunctions.vueServer(),
-        targetFunctions.vueClient()
+        targetFunctions.vueClient(),
       ])
     },
     'client:native'() {

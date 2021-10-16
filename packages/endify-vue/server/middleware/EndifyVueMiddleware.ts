@@ -1,5 +1,5 @@
 import * as express from 'express'
-import {ILoggerService} from '../../../endify-tools/LoggerService/types/ILoggerService'
+import {ILoggerService} from '../../../endify-core/src/services/LoggerService/types/ILoggerService'
 import {IVueBundleService} from '../services/VueBundleService/types/IVueBundleService'
 
 export class EndifyVueMiddleware {

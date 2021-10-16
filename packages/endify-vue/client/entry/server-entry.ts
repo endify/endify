@@ -2,7 +2,7 @@ import {createSSRApp} from 'vue'
 import {createMemoryHistory, createRouter} from 'vue-router'
 import {IServerEntryContext} from './enum/IServerEntryContext'
 import {setupRoutes} from '../setup/setupRoutes'
-import {ConfigService} from '../../../endify-tools/ConfigService/ConfigService'
+import {ConfigService} from '../../../endify-core/src/services/ConfigService/ConfigService'
 import config from '@app/config'
 import {setupStore} from '../setup/setupStore'
 import {setupRouter} from '../setup/setupRouter'
@@ -16,11 +16,13 @@ export default async function(context: IServerEntryContext) {
     app,
     url: context.req.url,
     history: createMemoryHistory(),
-    routes:  await setupRoutes({
-      config: configService.config
-    })
+    routes: await setupRoutes({
+      config: configService.config,
+    }),
   })
-  setupStore({app})
+  setupStore({
+    app,
+  })
   return app
 }
 

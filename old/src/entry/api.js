@@ -1,12 +1,12 @@
 import http from 'http'
 import path from 'path'
-import dotEnvExtended from 'dotenv-extended';
+import dotEnvExtended from 'dotenv-extended'
 import {setupServer} from '../setup/api/setupServer'
 import {VueBundleWatcher} from '../services/VueBundleWatcher'
 import {serverConfigService} from '../services/ServerConfigService'
 
 const vueClientDistPath = path.join(__ENDIFY_ENV__.ISSUER_PATH, '/dist/vue-client')
-const vueServerBundlePath = path.join(__ENDIFY_ENV__.ISSUER_PATH, '/dist/vue-server/vue-ssr-server-bundle.json')
+const vueServerBundlePath = path.join(__ENDIFY_ENV__.ISSUER_PATH, '/dist/vue-server/vue-ssr-server-launcher.json')
 const vueServerClientManifestPath = path.join(__ENDIFY_ENV__.ISSUER_PATH, '/dist/vue-client/vue-ssr-client-manifest.json')
 const vueTemplatePath = path.join(__ENDIFY_ENV__.BASE_PATH, '/src/services/vue/template.html')
 const publicDistPath = '/dist'
@@ -16,7 +16,7 @@ let currentExpressApp, vueBundleWatcher, server
 const setupServerAdapter = async () => {
   return await setupServer({
     vueClientDistPath,
-    vueBundleWatcher
+    vueBundleWatcher,
   })
 }
 
@@ -25,8 +25,8 @@ const start = async function() {
 
   dotEnvExtended.load({
     defaults: path.join(__ENDIFY_ENV__.BASE_PATH, '/.env.defaults'),
-    path: path.join(__ENDIFY_ENV__.BASE_PATH, '/.env')
-  });
+    path: path.join(__ENDIFY_ENV__.BASE_PATH, '/.env'),
+  })
   __ENDIFY_ENV__
   let clientWebpackConfig, serverWebpackConfig
   if(__ENDIFY_ENV__.ENV !== 'production') {
@@ -34,13 +34,13 @@ const start = async function() {
     serverWebpackConfig = require('../setup/vue/.old/webpack.config.vue.server.js')
   }
 
-  // Watch for bundle or load it on production
+  // Watch for launcher or load it on production
   const bundleWatcherOptions = {
     serverBundlePath: vueServerBundlePath,
     manifestBundlePath: vueServerClientManifestPath,
     templatePath: vueTemplatePath,
     publicPath: publicDistPath,
-    bundleRendererBaseDir: __ENDIFY_ENV__.BASE_PATH
+    bundleRendererBaseDir: __ENDIFY_ENV__.BASE_PATH,
   }
   if(__ENDIFY_ENV__.ENV !== 'production') {
     bundleWatcherOptions.clientWebpackConfig = clientWebpackConfig({

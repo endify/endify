@@ -1,6 +1,6 @@
 import {join, resolve} from 'path'
-import {Environments} from '../endify-tools/enum/Environments'
-import {WebpackConfigBase} from '../endify-tools/webpack.config.base'
+import {Environment} from '../endify-core/enum/Environment'
+import {WebpackConfigBase} from '../endify-core/webpack.config.base'
 import {DefinePlugin} from 'webpack'
 
 export class WebpackConfigServer extends WebpackConfigBase {
@@ -11,7 +11,7 @@ export class WebpackConfigServer extends WebpackConfigBase {
     super({
       env,
       issuerPath,
-      installedModulePath
+      installedModulePath,
     })
     this.webpackPollInterval = webpackPollInterval || 500
     this.apiEntryPath = apiEntryPath
@@ -22,9 +22,9 @@ export class WebpackConfigServer extends WebpackConfigBase {
   }
 
   async getConfig() {
-    let c = {
+    const c = {
       target: 'node',
-      entry: this.env === Environments.PRODUCTION ? this.apiEntryPath : [this.webpackHotPollPath, this.apiEntryPath],
+      entry: this.env === Environment.PRODUCTION ? this.apiEntryPath : [this.webpackHotPollPath, this.apiEntryPath],
       output: {
         filename: 'server.js',
         path: join(this.buildPath, 'server'),
@@ -34,14 +34,14 @@ export class WebpackConfigServer extends WebpackConfigBase {
         extensions: ['.endify.server.ts', '.endify.server.js'],
       },
       node: {
-        __dirname: true
+        __dirname: true,
       },
       plugins: [
         new DefinePlugin({
           '$endify.issuerPath': JSON.stringify(this.issuerPath),
-          '$endify.installedModulePath': JSON.stringify(this.installedModulePath)
-        })
-      ]
+          '$endify.installedModulePath': JSON.stringify(this.installedModulePath),
+        }),
+      ],
       // devtool: 'eval-source-map'
     }
     return this.mergeConfig(await super.getConfig(), c)

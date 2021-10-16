@@ -1,8 +1,8 @@
-import {LoggerService} from '../../../endify-tools/LoggerService/LoggerService'
+import {LoggerService} from '../../../endify-core/src/services/LoggerService/LoggerService'
 import {VueBundleService} from '../services/VueBundleService/VueBundleService'
 // import {EndifyVueMiddleware} from '../middleware/EndifyVueMiddleware'
 import {WebpackConfigVueServer} from '../../client/webpack.config.vue.server'
-import {Environments} from '../../../endify-tools/enum/Environments'
+import {Environment} from '../../../endify-core/enum/Environment'
 import {join} from 'path'
 import * as webpack from 'webpack'
 import {readFile} from 'fs'
@@ -15,16 +15,16 @@ export async function setupMiddleware(config) {
 
   loggerService.log('Setting up Vue...')
   const vueServerWebpackConfig = new WebpackConfigVueServer({
-    env: Environments.DEVELOPMENT,
+    env: Environment.DEVELOPMENT,
     issuerPath: $endify.issuerPath,
-    installedModulePath: $endify.installedModulePath
+    installedModulePath: $endify.installedModulePath,
   })
 
   const vueServerWebpackConfigObject = await vueServerWebpackConfig.getConfig()
 
   const vueServerBundler = new VueServerBundler(
     loggerService,
-    vueServerWebpackConfigObject
+    vueServerWebpackConfigObject,
   )
 
   const vueBundleService = new VueBundleService(vueServerBundler) // classesThatWillEmitSomethingLike: BundleHasBeenUpdated/Createdforthefirsttime

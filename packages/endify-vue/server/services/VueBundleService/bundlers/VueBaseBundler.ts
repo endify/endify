@@ -1,12 +1,12 @@
 import * as webpack from 'webpack'
 import {join} from 'path'
-import {ILoggerService} from '../../../../../endify-tools/LoggerService/types/ILoggerService'
+import {ILoggerService} from '../../../../../endify-core/src/services/LoggerService/types/ILoggerService'
 import {IVueBundler} from './types/IVueBundler'
 
 export class VueBaseBundler implements IVueBundler {
   private readonly webpackConfigObject: Object
   private loggerService: ILoggerService
-  public isReady: boolean = false
+  public isReady = false
   public bundle: unknown
 
   constructor(loggerService, webpackConfigObject) {
@@ -29,7 +29,8 @@ export class VueBaseBundler implements IVueBundler {
   public watch() {
     return new Promise((resolve, reject) => {
       const compiler = webpack(this.webpackConfigObject)
-      compiler.watch({}, async (error, stats) => {
+      compiler.watch({
+      }, async (error, stats) => {
         console.log('done')
         if(error) {
           reject(error)

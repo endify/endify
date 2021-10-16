@@ -1,5 +1,5 @@
 import * as http from 'http'
-import {ILoggerService} from '../../../endify-tools/LoggerService/types/ILoggerService'
+import {ILoggerService} from '../../../endify-core/src/services/LoggerService/types/ILoggerService'
 import * as chalk from 'chalk'
 import * as EventEmitter from 'events'
 import {ServerServiceEvent} from './enum/ServerServiceEvent'
@@ -41,10 +41,10 @@ export class ServerService extends EventEmitter {
     this.app = await this.appFactory()
     this.createServer()
     await this.listen(this.port)
-    this.loggerService.log(chalk.gray(`--------------------------------`))
+    this.loggerService.log(chalk.gray('--------------------------------'))
     this.loggerService.success('Server has started successfully.')
     this.loggerService.success(`Listening on http://localhost:${this.port}`)
-    this.loggerService.log(chalk.gray(`--------------------------------`))
+    this.loggerService.log(chalk.gray('--------------------------------'))
   }
 
   async reloadApp() {

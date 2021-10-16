@@ -93,7 +93,7 @@ module.exports = (options) => {
       modules: ['node_modules', path.join(basePath, 'node_modules')],
       alias: {
         '@project': issuerPath,
-        'endify/server': path.join(basePath, 'server/index.ts'),
+        'endify/server': path.join(basePath, 'server/old-index.js'),
       }
     },
     resolveLoader: {
@@ -107,7 +107,7 @@ module.exports = (options) => {
     c.plugins.push(new FriendlyErrorsWebpackPlugin())
   }
 
-  const packageJsonContent = fs.readFileSync(path.join(issuerPath, 'package.json'), 'utf-8')
+  const packageJsonContent = fs.readFileSync(path.join(issuerPath, 'launcher.json'), 'utf-8')
   const packageJson = JSON.parse(packageJsonContent)
   const version = packageJson.version
 
