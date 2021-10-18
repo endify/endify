@@ -1,10 +1,10 @@
-const {EndifyServerBundle} = require('@endify/server/launcher')
+const {EndifyServerLauncher} = require('@endify/server/launcher')
 const {resolve} = require('path')
 
 module.exports = () => {
   return {
     packages: [
-      new EndifyServerBundle({
+      new EndifyServerLauncher({
         entry: resolve('src/server'),
         inspectPort: false,
       }),

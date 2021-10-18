@@ -7,16 +7,22 @@
 //     port: 3123,
 //     watch: false,
 //     plugins: [
-//       // new EndifyVuePlugin({
-//       //   env: {
-//       //     DOLLAR_SIGN: '$'
-//       //   },
-//       //   entry: resolve('./client')
-//       // })
+//       new EndifyVuePlugin({
+//         env: {
+//           DOLLAR_SIGN: '$'
+//         },
+//         entry: resolve('./client')
+//       })
 //     ],
 //   })
 // }
-
-console.log('Witamy w smrodowie!')
-const test = 'elo'
-export default test
+export default async function() {
+  console.log('Hello server!')
+  await new Promise(resolve => {
+    setTimeout(resolve, 500)
+  })
+  console.log('Promise executed')
+  return {
+    port: 3002,
+  }
+}

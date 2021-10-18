@@ -2,11 +2,11 @@ import * as webpack from 'webpack'
 import * as chalk from 'chalk'
 import * as randomTextFaces from 'random-text-faces'
 import {spawn} from 'child_process'
-import {WebpackConfigServer} from '../../webpack.config.server'
+import {WebpackConfigServer} from '../../../webpack.config.server'
 import {resolve, join} from 'path'
-import {Environment} from '../../../endify-core/enum/Environment'
-import {LoggerService} from '../../../endify-core/src/services/LoggerService/LoggerService'
-import {ILoggerService} from '../../../endify-core/src/services/LoggerService/types/ILoggerService'
+import {Environment} from '../../../../endify-core/enum/Environment'
+import {LoggerService} from '../../../../endify-core/src/services/LoggerService/LoggerService'
+import {ILoggerService} from '../../../../endify-core/src/services/LoggerService/types/ILoggerService'
 
 export const DEFAULT_PORT = 3000
 

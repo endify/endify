@@ -1,5 +1,5 @@
 import * as http from 'http'
-import {ILoggerService} from '../../../endify-core/src/services/LoggerService/types/ILoggerService'
+import {ILoggerService} from '../../../../endify-core/src/services/LoggerService/types/ILoggerService'
 import * as chalk from 'chalk'
 import * as EventEmitter from 'events'
 import {ServerServiceEvent} from './enum/ServerServiceEvent'
@@ -47,7 +47,7 @@ export class ServerService extends EventEmitter {
     this.loggerService.log(chalk.gray('--------------------------------'))
   }
 
-  async reloadApp() {
+  async reloadApp(hard = false) {
     const app = await this.appFactory()
     if(this.app) {
       this.server.removeListener('request', this.app)

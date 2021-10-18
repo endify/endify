@@ -1,14 +1,18 @@
-const path = require('path')
+const {join, resolve} = require('path')
 const nodeExternals = require('webpack-node-externals')
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = () => {
   return {
     target: 'node',
-    entry: path.join(__dirname, '/src/launcher'),
-    context: path.join(__dirname),
+    entry: {
+      index: join(__dirname, '/src'),
+      launcher: join(__dirname, '/src/launcher'),
+    },
+    context: join(__dirname),
     output: {
-      path: path.resolve(__dirname, 'build/launcher'),
-      filename: 'index.js',
+      path: resolve(__dirname, 'build'),
+      filename: '[name].js',
       library: {
         type: 'commonjs2',
       },
@@ -19,14 +23,24 @@ module.exports = () => {
         {
           test: /\.tsx?$/,
           loader: 'ts-loader',
-          exclude: /node_modules/,
+          exclude: /(node_modules)/,
           options: {
-            configFile: path.resolve(__dirname, 'tsconfig.json'),
+            configFile: resolve(__dirname, 'tsconfig.json'),
             onlyCompileBundledFiles: true,
           },
         },
       ],
     },
+    plugins: [
+      new CopyPlugin({
+        patterns: [
+          {
+            from: join(__dirname, '/src/entry'),
+            to: 'entry.js'
+          },
+        ],
+      }),
+    ],
     resolve: {
       extensions: ['.ts', '.js'],
     },

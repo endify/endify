@@ -8,15 +8,19 @@
     "build": "webpack"
   },
   "exports": {
-    "./launcher": "./build/launcher/index.js",
-    "./entry": "./src/setup/index.ts"
+    "./launcher": "./build/launcher.js",
+    "./entry": "./build/entry.js",
+    ".": "./build/index.js"
+  },
+  "dependencies": {
+    "webpack": "^5.58.2"
   },
   "devDependencies": {
     "@types/node": "^16.10.9",
     "@types/webpack-env": "^1.16.3",
+    "copy-webpack-plugin": "^9.0.1",
     "ts-loader": "^9.2.6",
     "typescript": "^4.4.4",
-    "webpack": "^5.58.2",
     "webpack-cli": "^4.9.0",
     "webpack-node-externals": "^3.0.0"
   }

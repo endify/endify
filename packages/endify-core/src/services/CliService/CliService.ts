@@ -1,14 +1,19 @@
 import {join, relative, resolve} from 'path'
 import {Command} from 'commander'
+import {HookService} from '../HookService/HookService'
+import {CliProgressService} from '../CliProgressService/CliProgressService'
 
 export class CliService {
   private argv
+  private hooks = new HookService()
+  private cliProgressService = new CliProgressService(this.hooks)
 
   constructor(argv) {
     this.argv = argv
   }
 
   async start() {
+    this.cliProgressService.setup()
     const program = new Command()
     const cwdPath = process.cwd()
     program.option('-c, --config <configPath>', 'Config file')
@@ -24,6 +29,7 @@ export class CliService {
       for(const pack of config.packages) {
         pack.dev({
           config,
+          hooks: this.hooks,
         })
       }
     }

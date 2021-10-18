@@ -1,4 +1,4 @@
-import {ServerService} from './setup/ServerService/ServerService'
+import {ServerService} from './src/services/ServerService/ServerService'
 import {LoggerService} from '../endify-core/src/services/LoggerService/LoggerService'
 import * as express from 'express'
 import {ConfigService} from '../endify-core/src/services/ConfigService/ConfigService'

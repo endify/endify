@@ -1,20 +1,23 @@
-export class HookService {
-  private hooks = []
+import {IHookService} from './types/IHookService'
+import {Hook} from 'tapable'
 
-  public async call(hookId: string, payload: unknown): Promise<unknown> {
-    const matchedHooks = this.hooks.filter(hook => {
-      return hook[0] === hookId
-    })
-    return await new Promise((resolve, reject) => {
-      let temporaryPayload = payload
-      for(const hook of matchedHooks) {
-        temporaryPayload = hook[2](temporaryPayload)
-      }
-      resolve(temporaryPayload)
-    })
+export class HookService implements IHookService {
+  private hooks = {
   }
 
-  public on(hookId: string, name: string, fn: Function) {
-    this.hooks.push([hookId, name, fn])
+  public registerHook<T>(name: string, hook: T): T {
+    if(this.hooks[name]) {
+      throw new Error(`Hook already registered: ${name}`)
+    }
+    this.hooks[name] = hook
+    return hook
+  }
+
+  public getHook<T>(name: string): T {
+    const hook = this.hooks[name]
+    if(!hook) {
+      throw new Error(`Hook not found: ${name}`)
+    }
+    return hook
   }
 }
