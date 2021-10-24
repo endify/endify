@@ -1,10 +1,10 @@
 import Vuex from 'vuex'
-import modules from '../../../../packages/endify-vue/client/store'
+import modules from '../../../../packages/vue/client/store'
 import {sync} from 'vuex-router-sync'
 
 function getVuexStoreConfig() {
   return {
-    modules
+    modules,
   }
 }
 

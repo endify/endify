@@ -1,0 +1,22 @@
+{
+  "name": "@endify/vue",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "exports": {
+    "./extension": "./build/extension.js",
+    "./client": "./build/client.js"
+  },
+  "dependencies": {
+    "@vue/compiler-sfc": "^3.2.20",
+    "vue": "^3.2.20",
+    "vue-loader": "^15.9.8"
+  },
+  "devDependencies": {
+    "webpack": "^5.58.2"
+  }
+}

@@ -1,6 +1,6 @@
-import  {ServerHookTypes} from '../../packages/endify-core/src/services/HookService/types/ServerHookTypes'
+import  {ServerHookTypes} from '../../packages/core/src/services/HookService/types/ServerHookTypes'
 import config from '@app/config'
-import {ConfigService} from '../../packages/endify-core/src/services/ConfigService/ConfigService'
+import {ConfigService} from '../../packages/core/src/services/ConfigService/ConfigService'
 
 const configService = new ConfigService()
 

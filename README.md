@@ -18,14 +18,16 @@ Endify is a JavaScript framework aimed at connecting frontend and backend code i
 Package | Status | Description
 --- | --- | ---
 @endify/cli | 1.0.0-alpha.1 👽 | Command line tool that runs @endify/server along with @endify/electron
+@endify/core | 1.0.0-alpha.1 👽 | All scripts ALWAYS needed by other packages
 @endify/server | in progress | Runs backend code & serves client bundles
 @endify/vue | in progress | Default client setup (and the only one for now)
-@endify/electron | <span style="color:#ff461a">n/a</span> | Adds native app support
-@endify/extensions | <span style="color:#ff461a">n/a</span> | Allows Endify to be extended with extensions
+@endify/vue-ssr | in progress | Enable Server Side Rendering for @endify/vue
+@endify/example | in progress | Forkable showcase of all Endify features
+@endify/electron | <span style="color:#ff461a">2022 Q1</span> | Adds native app support for Windows, Mac & Linux
+create-endify-app | <span style="color:#ff461a">2021 Q4</span> | CLI tool for creating Endify apps
+@endify/hello-template | <span style="color:#ff461a">2021 Q4</span> | Template which is being used by create-endify-app
 @endify/static | <span style="color:#ff461a">n/a</span> | Adds /static folder support
 @endify/vue-script-loader | <span style="color:#ff461a">n/a</span> | Load `.endify.vue` files
-create-endify-app | <span style="color:#ff461a">n/a</span> | Init simple endify app
-@endify/hello-template | <span style="color:#ff461a">n/a</span> | Template which is being used by create-endify-app
 
 
  ## Features
@@ -58,9 +60,9 @@ create-endify-app | <span style="color:#ff461a">n/a</span> | Init simple endify 
  ✔️ It has some **Github Actions** examples of Testing & Building
  
  ✔️ And even it has some great tutorial on how to apply image to **kubernetes** with Github Actions!
-`
 
-|                               | Endify       | Nuxt.js                  |   |
+
+|                               | Endify       | Nuxt.js                  | Vite  |
 |--------------------------------|--------------|--------------------------|---|
 | Frontend hot reload            | ✅ Yes        | ✅ Yes                    |   |
 | Backend hot reload             | ✅ Yes        | ❌ No                     |   |

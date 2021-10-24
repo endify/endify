@@ -1,0 +1,31 @@
+{
+  "name": "@endify/cli",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack"
+  },
+  "bin": {
+    "endify": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "dependencies": {
+    "commander": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.10.9",
+    "@types/webpack-env": "^1.16.3",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.4.4",
+    "webpack": "^5.58.1",
+    "webpack-cli": "^4.9.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@endify/core": "^1.0.0"
+  }
+}
