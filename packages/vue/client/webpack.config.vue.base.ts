@@ -69,7 +69,7 @@ export class WebpackConfigVueBase extends WebpackConfigBase {
         new VueLoaderPlugin(),
       ],
       resolve: {
-        extensions: ['.endify.old-index.js', '.endify.client.js', '.ts', '.tsx', '.js', '.vue', '.json'],
+        extensions: ['.endify.old-index.ts', '.endify.client.js', '.ts', '.tsx', '.js', '.vue', '.json'],
       },
     }
 

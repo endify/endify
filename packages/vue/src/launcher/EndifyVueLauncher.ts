@@ -5,20 +5,20 @@ import {Configuration, HotModuleReplacementPlugin, ProgressPlugin} from 'webpack
 import * as nodeExternals from 'webpack-node-externals'
 import {EndifyCore, EndifyLogger} from '@endify/core'
 
-export class EndifyServerLauncher {
+export class EndifyVueLauncher {
   private readonly userEntry: string
   private readonly inspectPort: number|boolean
   private readonly buildPath: string
-  private endifyLogger = new EndifyLogger('[@endify/server]')
+  private endifyLogger = new EndifyLogger('[@endify/vue]')
 
   constructor({entry, inspectPort, buildPath}) {
     this.userEntry = entry
     this.inspectPort = inspectPort
-    this.buildPath = buildPath || join(process.cwd(), 'build/endify-server/endify-server.js')
+    this.buildPath = buildPath || join(process.cwd(), 'build/endify-vue/endify-vue.js')
   }
 
   async setup(endify: EndifyCore) {
-    this.endifyLogger.log('Setting up ServerLauncher...')
+    this.endifyLogger.log('Setting up VueLauncher...')
     const endifyCoreEmitter = endify.emitters.getEmitter('@endify/core')
     endifyCoreEmitter.on('first-build', async () => {
       const webpackConfig = await this.getWebpackConfig(endify)
@@ -27,26 +27,24 @@ export class EndifyServerLauncher {
   }
 
   async getWebpackConfig({emitters}) {
-    const endifyServerEntry = resolve(__dirname, __non_webpack_require__.resolve('@endify/server/entry'))
+    const endifyVueEntry = resolve(__dirname, __non_webpack_require__.resolve('@endify/vue/entry'))
     const webpackHotPollPath = __non_webpack_require__.resolve('webpack/hot/poll')
     const userEntry = resolve(process.cwd(), this.userEntry)
     const endifyCoreEmitter = emitters.getEmitter('@endify/core')
     const webpackConfig: Configuration = {
       target: 'node',
-      entry: [`${webpackHotPollPath}?1000`, endifyServerEntry],
+      entry: [`${webpackHotPollPath}?1000`, endifyVueEntry],
       mode: 'development',
       output: {
         filename: 'endify-server.js',
         path: join(process.cwd(), 'build/endify-server'),
         libraryTarget: 'commonjs2',
-        // hotUpdateChunkFilename: 'hot/hot-update.js',
-        // hotUpdateMainFilename: 'hot/hot-update.json',
       },
       resolve: {
         alias: {
-          '@endify/server/user-entry': userEntry,
+          '@endify/vue/user-entry': userEntry,
         },
-        extensions: ['.ts', '.js', '.json'],
+        extensions: ['.ts', '.js', '.json', '.vue'],
       },
       plugins: [
         new HotModuleReplacementPlugin(),
@@ -54,7 +52,7 @@ export class EndifyServerLauncher {
           endifyCoreEmitter.emit('update-progress-entity', {
             percentage,
             message,
-            name: '@endify/server',
+            name: '@endify/vue',
           })
         }),
       ],
@@ -62,7 +60,7 @@ export class EndifyServerLauncher {
         moduleIds: 'named',
       },
       externals: [nodeExternals({
-        allowlist: [`${webpackHotPollPath}?1000`, '@endify/server/user-entry'],
+        allowlist: [`${webpackHotPollPath}?1000`, '@endify/vue/user-entry'],
       })],
     }
     return webpackConfig

@@ -1,15 +1,29 @@
+import {relative, resolve, join} from 'path'
+import {ILauncherConfig} from './types/ILauncherConfig'
+
 export class ConfigService {
-  private _config = null
+  public config: ILauncherConfig = null
+
+  getConfigPath(configPath, cwdPath) {
+    return configPath ? resolve(cwdPath, configPath) : join(cwdPath, 'endify.config.js')
+  }
+
+  async loadConfigFromFile(configPath: string): Promise<ILauncherConfig> {
+    const relativeConfigPath = relative(__dirname, configPath)
+    const configFile = __non_webpack_require__(`./${relativeConfigPath}`)
+    await this.loadConfig(configFile)
+    return this.config
+  }
 
   async loadConfig(config) {
     if(typeof config === 'function') {
-      this._config = await config()
+      this.config = this.parseConfig(await config())
     } else {
-      this._config = config
+      this.config = this.parseConfig(config)
     }
   }
 
-  get config() {
-    return this._config
+  parseConfig(config): ILauncherConfig {
+    return config
   }
 }

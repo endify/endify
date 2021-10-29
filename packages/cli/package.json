@@ -14,7 +14,8 @@
     "README.md"
   ],
   "dependencies": {
-    "commander": "^8.2.0"
+    "commander": "^8.2.0",
+    "random-text-faces": "^1.0.9"
   },
   "devDependencies": {
     "@types/node": "^16.10.9",

@@ -1,5 +1,7 @@
-import App from './components/App'
+import App from '../components/App'
 
 export default {
-  rootComponent: App
+  rootComponent: App,
+  // routes:.
+  // store:,
 }

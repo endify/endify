@@ -9,6 +9,7 @@
     "start": "endify start"
   },
   "dependencies": {
+    "@endify/core": "^1.0.0",
     "@endify/cli": "^1.0.0",
     "@endify/server": "^1.0.0"
   },

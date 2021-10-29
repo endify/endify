@@ -18,12 +18,11 @@ interface BarEntity {
 
 
 export class CliProgressService {
-  private hooks: IHookService
   private bar: MultiBar
   private barEntities: BarEntity[] = []
+  private updateSymbol: symbol
 
-  constructor(hooks) {
-    this.hooks = hooks
+  constructor() {
     this.bar = new MultiBar({
       format: `${chalk.bold('{title}')} {bar} {percentage}% ${chalk.gray('·')} {message}`,
       barCompleteChar: '-',
@@ -33,26 +32,35 @@ export class CliProgressService {
       hideCursor: true,
       barsize: 20,
       fps: 30,
+      // forceRedraw: true,
     }, Presets.shades_grey)
   }
 
-  setup() {
-    const emitBuildProgressChangeHook = this.hooks.registerHook(EndifyCoreHooks.EMIT_BUILD_PROGRESS_CHANGE, new SyncHook())
-    const buildProgressChangeHook = this.hooks.registerHook<SyncWaterfallHook<[ProgressEntity[]]>>(EndifyCoreHooks.BUILD_PROGRESS_CHANGE, new SyncWaterfallHook(['progressEntities']))
-    emitBuildProgressChangeHook.tap('Show progress', () => {
-      const progressEntities = buildProgressChangeHook.call([])
-      this.updateBarState(progressEntities)
-    })
+  // setup() {
+  //   const emitBuildProgressChangeHook = this.hooks.registerHook(EndifyCoreHooks.EMIT_BUILD_PROGRESS_CHANGE, new SyncHook())
+  //   const buildProgressChangeHook = this.hooks.registerHook<SyncWaterfallHook<[ProgressEntity[]]>>(EndifyCoreHooks.BUILD_PROGRESS_CHANGE, new SyncWaterfallHook(['progressEntities']))
+  //   emitBuildProgressChangeHook.tap('Show progress', () => {
+  //     const progressEntities = buildProgressChangeHook.call([])
+  //     this.updateBarState(progressEntities)
+  //   })
+  // }
+
+  removeBars() {
+    for(const {bar} of this.barEntities) {
+      this.bar.remove(bar)
+    }
+    this.barEntities = []
   }
 
   updateBarState(progressEntities: ProgressEntity[]) {
+    // console.log('update state', progressEntities[0])
     for(const progressEntity of progressEntities) {
       const existingBarEntity = this.barEntities.find(barEntity => barEntity.progressEntity.name === progressEntity.name)
       const barPayload = this.getBarPayload(progressEntity)
       const percentage = this.calculatePercentage(progressEntity.percentage)
       if(existingBarEntity) {
         existingBarEntity.progressEntity = progressEntity
-      } else if(percentage < 1) {
+      } else /*if(percentage < 1)*/ {
         const bar = this.bar.create(100, percentage, barPayload)
         this.barEntities.push({
           progressEntity,
@@ -61,19 +69,29 @@ export class CliProgressService {
         bar.start()
       }
     }
-    const allBarsHaveFinished = progressEntities.every(progressEntity => progressEntity.percentage >= 1)
-    if(allBarsHaveFinished) {
-      for(const {bar} of this.barEntities) {
-        this.bar.remove(bar)
-      }
-      this.barEntities = []
-    } else {
-      for(const {progressEntity, bar} of this.barEntities) {
-        const barPayload = this.getBarPayload(progressEntity)
-        const percentage = this.calculatePercentage(progressEntity.percentage)
-        bar.update(percentage, barPayload)
-      }
+
+    for(const {progressEntity, bar} of this.barEntities) {
+      const barPayload = this.getBarPayload(progressEntity)
+      const percentage = this.calculatePercentage(progressEntity.percentage)
+      bar.update(percentage, barPayload)
     }
+
+    // const allBarsHaveFinished = progressEntities.every(progressEntity => progressEntity.percentage >= 1)
+    // if(allBarsHaveFinished) {
+    //   for(const {bar} of this.barEntities) {
+    //     this.bar.remove(bar)
+    //   }
+    //   this.barEntities = []
+    // }
+
+    // const updateSymbol = Symbol()
+    // this.updateSymbol = updateSymbol
+    // setTimeout(() => {
+    //   if(this.updateSymbol !== updateSymbol) {
+    //     return
+    //   }
+    //   this.updateBarState(progressEntities)
+    // }, 1000)
   }
 
   getBarPayload(progressEntity: ProgressEntity) {

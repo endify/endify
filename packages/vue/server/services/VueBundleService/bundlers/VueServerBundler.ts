@@ -34,7 +34,7 @@ export class VueServerBundler extends VueBaseBundler {
   }
 
   protected async loadBundle() {
-    const entryFilePath = join(this.bundleOutputPath, 'index.js')
+    const entryFilePath = join(this.bundleOutputPath, 'index.ts')
     const code = await readFile(entryFilePath, 'utf8')
     const wrapper = wrap(code)
     console.log('wrapper', wrapper.slice(500))
@@ -47,7 +47,7 @@ export class VueServerBundler extends VueBaseBundler {
     const fakeModulePolyfill = {
       exports: {
 
-      }
+      },
     } as Module
 
     function requirePolyfill(path) {
@@ -58,7 +58,7 @@ export class VueServerBundler extends VueBaseBundler {
       fakeModulePolyfill.exports,
       fakeModulePolyfill.exports,
       requirePolyfill,
-      fakeModulePolyfill
+      fakeModulePolyfill,
     )
     const hasDefaultExport = Object.prototype.hasOwnProperty.call(fakeModulePolyfill.exports, 'default')
     return hasDefaultExport ? fakeModulePolyfill.exports.default : fakeModulePolyfill.exports

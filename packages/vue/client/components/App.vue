@@ -1,5 +1,7 @@
 <template>
-  <div>Siemanko</div>
+  <div class="endify-app">
+    {{slot}}
+  </div>
 </template>
 
 <script lang="ts">

@@ -9,7 +9,7 @@ export class LoggerService implements ILoggerService {
   private readonly prefix: string
   public hooks: ILoggerServiceHooks
 
-  constructor(prefix: string, separator: string) {
+  constructor(prefix: string, separator = '·') {
     this.prefix = prefix
     this.separator = separator
     this.hooks = {
@@ -18,19 +18,19 @@ export class LoggerService implements ILoggerService {
   }
 
   log(...args): void {
-    return this.callLog(LogLevel.log, [this.prefixString + chalk.gray(this.separator), ...args])
+    return this.callLog(LogLevel.log, [this.prefixString, chalk.gray(this.separator), ...args])
   }
 
   success(...args): void {
-    return this.callLog(LogLevel.log, [this.prefixString + chalk.green(this.separator), ...args])
+    return this.callLog(LogLevel.log, [chalk.bold.green(this.prefix), chalk.green(this.separator), ...args])
   }
 
   error(...args): void {
-    return this.callLog(LogLevel.error, [this.prefixString + chalk.red(this.separator), ...args])
+    return this.callLog(LogLevel.error, [chalk.bold.red(this.prefix), chalk.red(this.separator), ...args])
   }
 
   warn(...args): void {
-    return this.callLog(LogLevel.warn, [this.prefixString + chalk.yellow(this.separator), ...args])
+    return this.callLog(LogLevel.warn, [chalk.bold.yellow(this.prefix), chalk.yellow(this.separator), ...args])
   }
 
   private callLog(logLevel: LogLevel, args) {
@@ -57,14 +57,14 @@ export class LoggerService implements ILoggerService {
           string += Math.random() > 0.5 ? chalk.gray('-') : chalk.white('-')
         }
       }
-      if(i > 0) {
-        this.clearLastLine()
-      }
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(null)
         }, time / 30)
       })
+      if(i > 0) {
+        this.clearLastLine()
+      }
     }
   }
 

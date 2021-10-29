@@ -1,11 +1,11 @@
-import {LoggerService} from '../../../../core/src/services/LoggerService/LoggerService'
+import {EndifyLogger} from '@endify/core'
 import {ServerService} from '../ServerService/ServerService'
 import * as express from 'express'
 
 export class ServerSetupService {
   private serverEntry
   private config
-  private loggerService = new LoggerService('[@endify/server]', ' ')
+  private loggerService = new EndifyLogger('[@endify/server]')
   private serverService: ServerService
 
   constructor(serverUserEntry) {
@@ -26,7 +26,6 @@ export class ServerSetupService {
   }
 
   async performHotUpdate(serverEntry) {
-    console.log('[ServerSetupService/performHotUpdate]', serverEntry)
     this.serverEntry = serverEntry
     const previousConfig = this.config
     await this.loadConfig()
@@ -41,7 +40,7 @@ export class ServerSetupService {
 
   async loadConfig() {
     const config = await this.serverEntry()
-    console.log('[ServerSetupService/loadConfig] New config loaded', config)
+    this.loggerService.log('Config reloaded', config)
     this.config = config
   }
 }
