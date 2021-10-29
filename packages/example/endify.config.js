@@ -16,12 +16,3 @@ module.exports = () => {
     ],
   }
 }
-
-
-
-// extendWebpackConfig(config, target) {
-//   return {
-//     ...config,
-//     test: 123,
-//   }
-// },

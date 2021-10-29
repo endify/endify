@@ -1,4 +1,4 @@
-import {EndifyLogger} from '@endify/core'
+import {EndifyLogger, EmitterService} from '@endify/core'
 import {ServerService} from '../ServerService/ServerService'
 import * as express from 'express'
 
@@ -7,6 +7,7 @@ export class ServerSetupService {
   private config
   private loggerService = new EndifyLogger('[@endify/server]')
   private serverService: ServerService
+  public readonly emitters = new EmitterService()
 
   constructor(serverUserEntry) {
     this.serverEntry = serverUserEntry
@@ -19,10 +20,41 @@ export class ServerSetupService {
     })
   }
 
+  registerEmitterEvents() {
+    const endifyServerEmitter = this.emitters.registerEmitter('@endify/server')
+    endifyServerEmitter.on('call-parent', ({id, payload}) => {
+      process.send({
+        __endify: true,
+        id,
+        payload,
+      })
+    })
+    process.on('message', ({__endify, id, payload}) => {
+      if(__endify) {
+        endifyServerEmitter.emit('receive-parent', {
+          id,
+          payload,
+        }).catch(e => {
+          this.loggerService.error('Error after emit receive-parent', e)
+        })
+      }
+    })
+  }
+
   async setup() {
+    this.registerEmitterEvents()
     await this.loadConfig()
+    await this.setupExtensions()
+    const endifyServerEmitter = this.emitters.getEmitter('@endify/server')
+    await endifyServerEmitter.emit('after-register')
     this.serverService.setPort(this.config.port)
     await this.serverService.setupServer()
+  }
+
+  async setupExtensions() {
+    await Promise.all(this.config.extensions.map(extension => extension.setup({
+      emitters: this.emitters
+    })))
   }
 
   async performHotUpdate(serverEntry) {

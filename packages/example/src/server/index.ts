@@ -1,16 +1,14 @@
-// import {EndifyVueExtension} from '@endify/vue'
-// import {resolve} from 'path'
+import {VueExtension} from '@endify/vue'
 
 export default async function() {
   return {
-    port: 3005,
+    port: 3006,
     extensions: [
-      // new EndifyVueExtension({
-      //   env: {
-      //     DOLLAR_SIGN: '$',
-      //   },
-      //   entry: resolve('./client'),
-      // }),
+      new VueExtension({
+        env: {
+          DOLLAR_SIGN: '$',
+        },
+      }),
     ],
     extendApp({app}) {
       app.get('/siema', (req, res) => {

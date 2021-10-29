@@ -10,6 +10,7 @@ export class EndifyServerLauncher {
   private readonly inspectPort: number|boolean
   private readonly buildPath: string
   private endifyLogger = new EndifyLogger('[@endify/server]')
+  private childProcess
 
   constructor({entry, inspectPort, buildPath}) {
     this.userEntry = entry
@@ -23,6 +24,17 @@ export class EndifyServerLauncher {
     endifyCoreEmitter.on('first-build', async () => {
       const webpackConfig = await this.getWebpackConfig(endify)
       await this.dev(endify, webpackConfig)
+    })
+    const endifyServerEmitter = endify.emitters.registerEmitter('@endify/server')
+    endifyServerEmitter.on('call-child', ({id, payload}) => {
+      if(!this.childProcess) {
+        throw new Error('Child process has not been spawned yet')
+      }
+      this.childProcess.send({
+        __endify: true,
+        id,
+        payload,
+      })
     })
   }
 
@@ -90,13 +102,24 @@ export class EndifyServerLauncher {
         // const apiProcess = spawn('node', args, {
         //   stdio: ['pipe', 'inherit', 'inherit'],
         // })
-        const apiProcess = fork(userBuildPath, [], {
+        this.childProcess = fork(userBuildPath, [], {
           // stdio: ['pipe', 'inherit', 'inherit'],
           // execArgv:
           cwd: process.cwd(),
         })
-        apiProcess.on('close', (code) => {
+        this.childProcess.on('close', (code) => {
           return this.endifyLogger.warn('API process has been shut down, status code:', code)
+        })
+        const endifyServerEmitter = emitters.getEmitter('@endify/server')
+        this.childProcess.on('message', ({__endify, id, payload}) => {
+          if(__endify) {
+            endifyServerEmitter.emit('receive-child', {
+              id,
+              payload,
+            }).catch(e => {
+              this.endifyLogger.error('Error after emit receive-child', e)
+            })
+          }
         })
         spawned = true
       }

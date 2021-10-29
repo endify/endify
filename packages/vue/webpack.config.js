@@ -6,7 +6,7 @@ module.exports = () => {
   return {
     target: 'node',
     entry: {
-      index: join(__dirname, '/src'),
+      extension: join(__dirname, '/src/extension'),
       launcher: join(__dirname, '/src/launcher'),
     },
     context: join(__dirname),
@@ -31,16 +31,16 @@ module.exports = () => {
         },
       ],
     },
-    plugins: [
-      new CopyPlugin({
-        patterns: [
-          {
-            from: join(__dirname, '/src/entry'),
-            to: 'entry.js',
-          },
-        ],
-      }),
-    ],
+    // plugins: [
+    //   new CopyPlugin({
+    //     patterns: [
+    //       {
+    //         from: join(__dirname, '/src/entry'),
+    //         to: 'entry.js',
+    //       },
+    //     ],
+    //   }),
+    // ],
     resolve: {
       extensions: ['.ts', '.js'],
     },

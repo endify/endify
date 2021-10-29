@@ -1,2 +1,2 @@
-export {EndifyVueLauncher as ServerLauncher} from './EndifyVueLauncher'
+export {EndifyVueLauncher as VueLauncher} from './EndifyVueLauncher'
 

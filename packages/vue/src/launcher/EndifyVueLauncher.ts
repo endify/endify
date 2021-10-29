@@ -21,91 +21,32 @@ export class EndifyVueLauncher {
     this.endifyLogger.log('Setting up VueLauncher...')
     const endifyCoreEmitter = endify.emitters.getEmitter('@endify/core')
     endifyCoreEmitter.on('first-build', async () => {
-      const webpackConfig = await this.getWebpackConfig(endify)
-      await this.dev(endify, webpackConfig)
+      await this.dev(endify)
     })
   }
 
-  async getWebpackConfig({emitters}) {
-    const endifyVueEntry = resolve(__dirname, __non_webpack_require__.resolve('@endify/vue/entry'))
-    const webpackHotPollPath = __non_webpack_require__.resolve('webpack/hot/poll')
-    const userEntry = resolve(process.cwd(), this.userEntry)
-    const endifyCoreEmitter = emitters.getEmitter('@endify/core')
-    const webpackConfig: Configuration = {
-      target: 'node',
-      entry: [`${webpackHotPollPath}?1000`, endifyVueEntry],
-      mode: 'development',
-      output: {
-        filename: 'endify-server.js',
-        path: join(process.cwd(), 'build/endify-server'),
-        libraryTarget: 'commonjs2',
-      },
-      resolve: {
-        alias: {
-          '@endify/vue/user-entry': userEntry,
-        },
-        extensions: ['.ts', '.js', '.json', '.vue'],
-      },
-      plugins: [
-        new HotModuleReplacementPlugin(),
-        new ProgressPlugin((percentage, message) => {
-          endifyCoreEmitter.emit('update-progress-entity', {
-            percentage,
-            message,
-            name: '@endify/vue',
-          })
-        }),
-      ],
-      optimization: {
-        moduleIds: 'named',
-      },
-      externals: [nodeExternals({
-        allowlist: [`${webpackHotPollPath}?1000`, '@endify/vue/user-entry'],
-      })],
-    }
-    return webpackConfig
-  }
+  async dev(endify) {
+    const endifyServerEmitter = endify.emitters.getEmitter('@endify/server')
+    const endifyCoreEmitter = endify.emitters.getEmitter('@endify/core')
 
-  dev({emitters}: EndifyCore, webpackConfig) {
-    const userBuildPath = this.buildPath
-    const compiler = webpack(webpackConfig)
-    let spawned = false
-    compiler.watch({
-
-    }, async (error, stats) => {
-      if(error) {
-        return this.endifyLogger.error('Build failed', error)
-      }
-      if(!spawned) {
-        let inspectPort = null
-        if(this.inspectPort === true) {
-          inspectPort = 9229
-        }
-        if(typeof this.inspectPort === 'number') {
-          inspectPort = this.inspectPort
-        }
-        // const args = this.inspectPort === null ? [userBuildPath] : [`--inspect=${inspectPort}`, userBuildPath]
-        // const apiProcess = spawn('node', args, {
-        //   stdio: ['pipe', 'inherit', 'inherit'],
-        // })
-        const apiProcess = fork(userBuildPath, [], {
-          // stdio: ['pipe', 'inherit', 'inherit'],
-          // execArgv:
-          cwd: process.cwd(),
+    endifyServerEmitter.on('receive-child', ({id, payload}) => {
+      console.log('got message from child', id, payload)
+      if(id === '@endify/vue:build-progress-change') {
+        endifyCoreEmitter.emit('update-progress-entity', {
+          percentage: payload.percentage,
+          message: payload.message,
+          name: '@endify/vue',
         })
-        apiProcess.on('close', (code) => {
-          return this.endifyLogger.warn('API process has been shut down, status code:', code)
-        })
-        spawned = true
       }
     })
-  }
 
-  prod() {
-    console.log('Build production launcher for EndifyServer')
-  }
-
-  start() {
-    console.log('Start EndifyServer')
+    let childBuiltOnce = false
+    await new Promise((resolve, reject) => {
+      endifyServerEmitter.on('receive-child', ({id}) => {
+        if(!childBuiltOnce && id === '@endify/vue:after-build') {
+          resolve(null)
+        }
+      })
+    })
   }
 }
