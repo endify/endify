@@ -1,0 +1,46 @@
+body {
+
+}
+
+.navbar .logo {
+  max-height: 20px;
+  margin-top: 8px;
+}
+
+.navbar .site-name {
+  display: none;
+}
+
+:root {
+  --c-brand: hsl(11deg 100% 55%);
+  --c-brand-light: hsl(12deg 100% 65%);
+  --c-text-lightest: hsl(0deg 0% 10%);
+  --c-text-lighter: hsl(0deg 0% 50%);
+}
+
+.home .hero img {
+  margin: 1.5rem auto 1.5rem;
+  margin-bottom: 0;
+}
+
+.home .hero .description {
+  font-size: 1.4rem;
+  margin-top: 0;
+}
+
+.home #main-title {
+  display: none;
+}
+
+.home .hero .action-button {
+  border-width: 0;
+  padding: .4rem 1.6rem;
+  border-radius: 16px 4px;
+}
+
+@media (max-width: 719px) {
+  .home .feature {
+    max-width: 100%;
+    padding: 0 0;
+  }
+}

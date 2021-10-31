@@ -18,7 +18,7 @@ export async function setupServer({vueClientDistPath, vueBundleWatcher}) {
     app.use(vueBundleWatcher.hotMiddleware);
   }
   app.use('/dist', express.static(vueClientDistPath))
-  app.use('/static', express.static(join(__ENDIFY_ENV__.ISSUER_PATH, 'static')))
+  app.use('/public', express.static(join(__ENDIFY_ENV__.ISSUER_PATH, 'static')))
   app.use(async (req, res) => {
     if(__ENDIFY_ENV__.ENV !== 'production' && !vueBundleWatcher.renderer) {
       await new Promise((resolve, reject) => {
