@@ -1,4 +1,4 @@
-import {EndifyLogger, EmitterService} from '@endify/core'
+import {EmitterService, EndifyLogger} from '@endify/core'
 import {ServerService} from '../ServerService/ServerService'
 import * as express from 'express'
 
@@ -12,12 +12,18 @@ export class ServerSetupService {
   constructor(serverUserEntry) {
     this.serverEntry = serverUserEntry
     this.serverService = new ServerService(this.loggerService, () => {
-      const app = express()
-      app.get('/', (req, res) => {
-        res.send('siema')
-      })
-      return app
+      return this.appFactory()
     })
+  }
+
+  async appFactory() {
+    const app = express()
+    const endifyServerEmitter = this.emitters.getEmitter('@endify/server')
+    app.get('/test', (req, res) => {
+      res.send('test')
+    })
+    await endifyServerEmitter.emit('create-app', {app})
+    return app
   }
 
   registerEmitterEvents() {
@@ -29,6 +35,7 @@ export class ServerSetupService {
         payload,
       })
     })
+
     process.on('message', ({__endify, id, payload}) => {
       if(__endify) {
         endifyServerEmitter.emit('receive-parent', {
@@ -71,8 +78,6 @@ export class ServerSetupService {
   }
 
   async loadConfig() {
-    const config = await this.serverEntry()
-    this.loggerService.log('Config reloaded', config)
-    this.config = config
+    this.config = await this.serverEntry()
   }
 }

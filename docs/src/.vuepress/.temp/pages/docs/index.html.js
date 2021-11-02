@@ -8,8 +8,14 @@ export const data = {
   "headers": [],
   "filePathRelative": "docs/index.md",
   "git": {
-    "updatedTime": null,
-    "contributors": []
+    "updatedTime": 1635701567000,
+    "contributors": [
+      {
+        "name": "pieczorx",
+        "email": "pieczorex@gmail.com",
+        "commits": 1
+      }
+    ]
   }
 }
 

@@ -1,4 +1,5 @@
-import {VueExtension} from '@endify/vue'
+import {VueExtension} from '@endify/vue/extension'
+import {resolve} from 'path'
 
 export default async function() {
   return {
@@ -8,6 +9,7 @@ export default async function() {
         env: {
           DOLLAR_SIGN: '$',
         },
+        htmlTemplatePath: require.resolve('../client/template.html')
       }),
     ],
     extendApp({app}) {

@@ -15,7 +15,7 @@ export class WebpackConfigVueServer extends WebpackConfigVueBase {
       entry: join(this.installedModulePath, 'packages/endify-vue/client/entry/server-entry'),
       target: 'node',
       output: {
-        filename: 'index.ts',
+        filename: 'index.js',
         publicPath: '/public/',
         path: join(this.buildPath, 'vue-server'),
         libraryTarget: 'umd',

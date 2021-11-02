@@ -3,7 +3,7 @@ const handle = ({paths}) => {
   const webpack = require('webpack')
   const {spawn} = require('child_process')
   const DEST_PATH = process.cwd()
-  const ENTRY_PATH = path.join(DEST_PATH, 'old-index.ts')
+  const ENTRY_PATH = path.join(DEST_PATH, 'old-index.js')
   const electron = require('electron')
   const webpackConfig = require('../../config/webpack/webpack.config.api')({
     env: 'development',

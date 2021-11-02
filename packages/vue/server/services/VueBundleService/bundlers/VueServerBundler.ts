@@ -34,7 +34,7 @@ export class VueServerBundler extends VueBaseBundler {
   }
 
   protected async loadBundle() {
-    const entryFilePath = join(this.bundleOutputPath, 'index.ts')
+    const entryFilePath = join(this.bundleOutputPath, 'index.js')
     const code = await readFile(entryFilePath, 'utf8')
     const wrapper = wrap(code)
     console.log('wrapper', wrapper.slice(500))

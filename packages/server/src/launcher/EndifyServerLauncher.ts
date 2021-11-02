@@ -19,7 +19,6 @@ export class EndifyServerLauncher {
   }
 
   async setup(endify: EndifyCore) {
-    this.endifyLogger.log('Setting up ServerLauncher...')
     const endifyCoreEmitter = endify.emitters.getEmitter('@endify/core')
     endifyCoreEmitter.on('first-build', async () => {
       const webpackConfig = await this.getWebpackConfig(endify)
@@ -44,6 +43,7 @@ export class EndifyServerLauncher {
     const userEntry = resolve(process.cwd(), this.userEntry)
     const endifyCoreEmitter = emitters.getEmitter('@endify/core')
     const webpackConfig: Configuration = {
+      // context: endifyServerEntry,
       target: 'node',
       entry: [`${webpackHotPollPath}?1000`, endifyServerEntry],
       mode: 'development',

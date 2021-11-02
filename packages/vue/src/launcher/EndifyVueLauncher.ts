@@ -1,8 +1,4 @@
-import {join, resolve} from 'path'
-import {webpack} from 'webpack'
-import {fork, spawn} from 'child_process'
-import {Configuration, HotModuleReplacementPlugin, ProgressPlugin} from 'webpack'
-import * as nodeExternals from 'webpack-node-externals'
+import {join} from 'path'
 import {EndifyCore, EndifyLogger} from '@endify/core'
 
 export class EndifyVueLauncher {
@@ -18,7 +14,6 @@ export class EndifyVueLauncher {
   }
 
   async setup(endify: EndifyCore) {
-    this.endifyLogger.log('Setting up VueLauncher...')
     const endifyCoreEmitter = endify.emitters.getEmitter('@endify/core')
     endifyCoreEmitter.on('first-build', async () => {
       await this.dev(endify)
@@ -30,7 +25,6 @@ export class EndifyVueLauncher {
     const endifyCoreEmitter = endify.emitters.getEmitter('@endify/core')
 
     endifyServerEmitter.on('receive-child', ({id, payload}) => {
-      console.log('got message from child', id, payload)
       if(id === '@endify/vue:build-progress-change') {
         endifyCoreEmitter.emit('update-progress-entity', {
           percentage: payload.percentage,
@@ -38,7 +32,18 @@ export class EndifyVueLauncher {
           name: '@endify/vue',
         })
       }
+      if(id === '@endify/vue:get-launcher-options') {
+        endifyServerEmitter.emit('call-child', {
+          id: '@endify/vue:set-launcher-options',
+          payload: {
+            userEntry: this.userEntry
+          }
+        })
+      }
     })
+
+
+
 
     let childBuiltOnce = false
     await new Promise((resolve, reject) => {

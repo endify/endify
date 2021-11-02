@@ -45,10 +45,10 @@ export class ServerService extends EventEmitter {
     this.app = await this.appFactory()
     this.createServer()
     await this.listen(this.port)
-    this.loggerService.log(chalk.gray('--------------------------------'))
-    this.loggerService.success('Server has started successfully.')
-    this.loggerService.success(`Listening on http://localhost:${this.port}`)
-    this.loggerService.log(chalk.gray('--------------------------------'))
+    // this.loggerService.log(chalk.gray('--------------------------------'))
+    // this.loggerService.success('Server has started successfully.')
+    // this.loggerService.success(`Listening on http://localhost:${this.port}`)
+    // this.loggerService.log(chalk.gray('--------------------------------'))
   }
 
   async reloadApp() {

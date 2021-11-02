@@ -93,7 +93,7 @@ module.exports = (options) => {
       modules: ['node_modules', path.join(basePath, 'node_modules')],
       alias: {
         '@project': issuerPath,
-        'endify/server': path.join(basePath, 'server/old-index.ts'),
+        'endify/server': path.join(basePath, 'server/old-index.js'),
       }
     },
     resolveLoader: {

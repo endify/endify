@@ -1,10 +1,17 @@
 import {IVueExtensionOptions} from "./types/IVueExtensionOptions";
-import {join, resolve} from "path";
+import {join, resolve, relative} from "path";
 import {Configuration, HotModuleReplacementPlugin, ProgressPlugin, webpack} from "webpack";
-import {fork} from "child_process";
+import * as nodeExternals from 'webpack-node-externals'
+import * as webpackHotMiddleware from 'webpack-hot-middleware'
+import * as webpackDevMiddleware from 'webpack-dev-middleware'
+import {VueLoaderPlugin} from 'vue-loader'
+import * as HtmlWebpackPlugin from 'html-webpack-plugin'
+import {readFile} from 'fs'
+import * as ErrorOverlayPlugin from 'error-overlay-webpack-plugin'
 
 export class VueExtension {
   private options: IVueExtensionOptions
+  private outputPath: string = join(process.cwd(), 'build/endify-vue')
 
   constructor(options: IVueExtensionOptions) {
     this.options = options
@@ -19,55 +26,109 @@ export class VueExtension {
   }
 
   async getWebpackConfig({emitters}) {
-    // const endifyVueEntry = resolve(__dirname, __non_webpack_require__.resolve('@endify/vue/entry'))
-    // const webpackHotPollPath = __non_webpack_require__.resolve('webpack/hot/poll')
-    // const userEntry = resolve(process.cwd(), this.userEntry)
-    // const endifyCoreEmitter = emitters.getEmitter('@endify/core')
-    // const webpackConfig: Configuration = {
-    //   target: 'node',
-    //   entry: [`${webpackHotPollPath}?1000`, endifyVueEntry],
-    //   mode: 'development',
-    //   output: {
-    //     filename: 'endify-server.js',
-    //     path: join(process.cwd(), 'build/endify-server'),
-    //     libraryTarget: 'commonjs2',
-    //   },
-    //   resolve: {
-    //     alias: {
-    //       '@endify/vue/user-entry': userEntry,
-    //     },
-    //     extensions: ['.ts', '.js', '.json', '.vue'],
-    //   },
-    //   plugins: [
-    //     new HotModuleReplacementPlugin(),
-    //     new ProgressPlugin((percentage, message) => {
-    //       endifyCoreEmitter.emit('update-progress-entity', {
-    //         percentage,
-    //         message,
-    //         name: '@endify/vue',
-    //       })
-    //     }),
-    //   ],
-    //   optimization: {
-    //     moduleIds: 'named',
-    //   },
-    //   externals: [nodeExternals({
-    //     allowlist: [`${webpackHotPollPath}?1000`, '@endify/vue/user-entry'],
-    //   })],
-    // }
-    // return webpackConfig
+    const endifyServerEmitter = emitters.getEmitter('@endify/server')
+    endifyServerEmitter.emit('call-parent', {
+      id: '@endify/vue:get-launcher-options'
+    }).then()
+    const launcherOptions: {userEntry: string} = await new Promise((resolve) => {
+      endifyServerEmitter.on('receive-parent', ({id, payload}) => {
+        if(id === '@endify/vue:set-launcher-options') {
+          resolve(payload)
+        }
+      })
+    })
+
+
+    const endifyVueEntry = resolve(__dirname, __non_webpack_require__.resolve('@endify/vue/entry'))
+    const webpackHotPollPath = __non_webpack_require__.resolve('webpack/hot/poll')
+    const userEntry = resolve(process.cwd(), launcherOptions.userEntry)
+    console.log({launcherOptions, userEntry})
+    const webpackConfig: Configuration = {
+      entry: [__non_webpack_require__.resolve('webpack-hot-middleware/client'), endifyVueEntry],
+      mode: 'development',
+      output: {
+        filename: 'endify-vue.js',
+        path: this.outputPath,
+        // libraryTarget: 'commonjs2',
+      },
+      resolve: {
+        alias: {
+          '@endify/vue/user-entry': userEntry,
+        },
+        extensions: ['.ts', '.js', '.json', '.vue'],
+        modules: [
+          relative(process.cwd(), resolve(__dirname, '../node_modules'))
+        ]
+      },
+      plugins: [
+        new HotModuleReplacementPlugin(),
+        new ProgressPlugin((percentage, message) => {
+          endifyServerEmitter.emit('call-parent', {
+            id: '@endify/vue:build-progress-change',
+            payload: {
+              percentage,
+              message,
+              name: '@endify/vue',
+            },
+          })
+        }),
+        new VueLoaderPlugin(),
+        new HtmlWebpackPlugin({
+          publicPath: '/dist',
+          template: this.options.htmlTemplatePath
+        }),
+        new ErrorOverlayPlugin()
+      ],
+      optimization: {
+        moduleIds: 'named',
+      },
+      module: {
+        rules: [
+          {
+            test: /\.vue$/,
+            use: 'vue-loader'
+          }
+        ],
+      },
+      // stats: false,
+      externals: [nodeExternals({
+        allowlist: ['@endify/vue/user-entry'],
+      })],
+      resolveLoader: {
+        modules: [
+          relative(process.cwd(), resolve(__dirname, '../node_modules'))
+        ]
+      },
+      devtool: 'cheap-module-source-map',
+    }
+    return webpackConfig
   }
 
   async dev({emitters}, webpackConfig) {
-    console.log('woaah 1')
+    const compiler = webpack(await this.getWebpackConfig({emitters}))
     const endifyServerEmitter = emitters.getEmitter('@endify/server')
-    endifyServerEmitter.emit('call-parent', {
-      id: '@endify/vue:build-progress-change',
-      payload: {
-        siema: 1,
-        elo: 2,
-        test: true
-      },
+    endifyServerEmitter.on('create-app', ({app}) => {
+      app.use(webpackDevMiddleware(compiler, {
+        publicPath: '/dist',
+        writeToDisk: true,
+        // stats: false,
+      }));
+      app.use(webpackHotMiddleware(compiler, {
+        // log: false,
+      }));
+      app.get('*', (req, res) => {
+        readFile(join(this.outputPath, 'index.html'), (err, html) => {
+          if (err) {
+            throw err
+          }
+
+          // html = html
+          //   .toString()
+          //   .replace('<div id="app">', `<div id="app">${appContent}`)
+          res.setHeader('Content-Type', 'text/html')
+          res.send(html)
+        })
+      })
     })
     // const userBuildPath = this.buildPath
     // const compiler = webpack(webpackConfig)

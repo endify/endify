@@ -18,7 +18,7 @@ module.exports = () => {
     entry: 'test.js',
     target: 'node',
     output: {
-      filename: 'old-index.ts',
+      filename: 'old-index.js',
       publicPath: '/public/',
       path: 'build',
     },

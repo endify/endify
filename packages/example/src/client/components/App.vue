@@ -1,15 +1,16 @@
 <template>
-  <App>
-    Hello world!
-  </App>
+<!--  <App>-->
+<!--    Hello world!-->
+<!--  </App>-->
+  Siemanderkoasdasdasdasdasdasdasdasdasdasd
 </template>
 
 <script>
-  import {App} from '@endify/vue'
+  // import {App} from '@endify/vue'
 
   export default {
     components: {
-      App,
+      // App,
     }
   }
 </script>

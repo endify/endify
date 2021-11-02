@@ -24,15 +24,14 @@ export class CliProgressService {
 
   constructor() {
     this.bar = new MultiBar({
-      format: `${chalk.bold('{title}')} {bar} {percentage}% ${chalk.gray('·')} {message}`,
+      format: `${chalk.bold('{title}')} {bar} {percentage}% ${chalk.gray('·')} {value}/{total} ${chalk.gray('·')} {message}`,
       barCompleteChar: '-',
       barIncompleteChar: ' ',
       formatBar: this.formatBar.bind(this),
       clearOnComplete: false,
       hideCursor: true,
       barsize: 20,
-      fps: 30,
-      // forceRedraw: true,
+      fps: 120,
     }, Presets.shades_grey)
   }
 

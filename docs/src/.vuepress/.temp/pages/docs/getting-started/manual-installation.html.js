@@ -15,8 +15,14 @@ export const data = {
   ],
   "filePathRelative": "docs/getting-started/manual-installation.md",
   "git": {
-    "updatedTime": null,
-    "contributors": []
+    "updatedTime": 1635701567000,
+    "contributors": [
+      {
+        "name": "pieczorx",
+        "email": "pieczorex@gmail.com",
+        "commits": 1
+      }
+    ]
   }
 }
 
