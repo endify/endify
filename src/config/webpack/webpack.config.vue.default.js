@@ -58,7 +58,7 @@ module.exports = (options) => {
         },
         {
           test: /\.(j|t)sx?$/,
-          exclude: /node_modules\/(?!(endify)\/).*/,
+          exclude: /node_modules\/(?!(endify-fork)\/).*/,
           use: {
             loader: require.resolve("babel-loader"),
             options: {
