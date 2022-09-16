@@ -104,6 +104,9 @@ const handle = async ({paths, config, argv}) => {
   try {
     const res = await argvMap[argv[0].split(':').slice(1).join(':')]()
     console.log('Operation successfull. Thanks for using Endify!')
+    if(argv.includes('--logWebpackOutput')) {
+      console.log(res)
+    }
   } catch(e) {
     console.error('An error occurred while trying to build:', e)
   }
