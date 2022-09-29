@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+console.log('endify cli initialized')
 const path = require('path')
 const paths = {
   issuerPath: process.cwd(),

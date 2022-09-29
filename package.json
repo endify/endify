@@ -16,7 +16,7 @@
     "url": "https://github.com/endify/endify/issues"
   },
   "bin": {
-    "endify": "src/cli/index.js"
+    "endify-cli": "src/cli/index.js"
   },
   "babel": {
     "env": {
