@@ -1,6 +1,6 @@
 {
   "name": "endify-fork",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Vue.js on front, Node.js behind, Electron ready, Mobile soon - All in one codebase",
   "main": "src/endify.js",
   "scripts": {
