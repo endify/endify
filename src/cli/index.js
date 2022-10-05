@@ -1,9 +1,4 @@
-#!/bin/sh -
-':' /*-
-test1=$(nodejs --version 2>&1) && exec nodejs "$0" "$@"
-test2=$(node --version 2>&1) && exec node "$0" "$@"
-exec printf '%s\n' "$test1" "$test2" 1>&2
-*/
+#!/usr/bin/env nodejs
 console.log('endify cli initialized')
 const path = require('path')
 const paths = {
